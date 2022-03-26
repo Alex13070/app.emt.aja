@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 public class PruebaProyectoApplication {
 //main
 //me ves?
+//hola
 	public static void main(String[] args) {
 		SpringApplication.run(PruebaProyectoApplication.class, args);
 	}
