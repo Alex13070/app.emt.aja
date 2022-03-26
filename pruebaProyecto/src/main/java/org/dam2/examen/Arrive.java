@@ -32,6 +32,7 @@ public class Arrive {
 	
 	public org.springframework.data.geo.Point getGeometry() {
 		
+		//Pasar de un tipoo de punto a otro
 		return new org.springframework.data.geo.Point (geometry.getCoordinates().get(0), geometry.getCoordinates().get(1));
 		
 	}
