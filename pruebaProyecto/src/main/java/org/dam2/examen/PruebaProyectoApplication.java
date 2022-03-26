@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class PruebaProyectoApplication {
-
+//main
 	public static void main(String[] args) {
 		SpringApplication.run(PruebaProyectoApplication.class, args);
 	}
