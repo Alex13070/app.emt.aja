@@ -1,7 +1,5 @@
 package org.dam2.examen;
 
-import java.util.ArrayList;
-
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;

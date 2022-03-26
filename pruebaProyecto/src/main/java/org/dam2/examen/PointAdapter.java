@@ -1,12 +1,9 @@
 package org.dam2.examen;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 import org.springframework.data.geo.Point;
 
-import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -17,7 +14,7 @@ public class PointAdapter extends TypeAdapter<Point>{
 
 	@Override
 	public void write(JsonWriter out, Point value) throws IOException {
-		
+		/*
 		Gson gson = new Gson();
 		
 		out.beginObject();
@@ -63,6 +60,7 @@ public class PointAdapter extends TypeAdapter<Point>{
 
 	@Override
 	public Point read(JsonReader in) throws IOException {
+		/*
 		// TODO Auto-generated method stub
 		Gson gson = new Gson ();
 		
