@@ -25,5 +25,9 @@ public class Variables {
 	
 	public static String key = "b7a159e9-33f8-41bd-b61b-0529ba6643cd";
 
+	public static String email="app.emt.aja@gmail.com";
+
+	public static String password ="Autobus2022";
+
 
 }
