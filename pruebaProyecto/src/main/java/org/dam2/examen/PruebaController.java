@@ -10,21 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-
 @RestController
 @RequestMapping("/prueba")
 public class PruebaController {
 	
 	
 	@GetMapping ("/consultar/{parada}")
-	public ResponseEntity<TimeArrivalBus> consultarParada (@PathVariable String parada)
+	public ResponseEntity<String> consultarParada (@PathVariable String parada)
 	{
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response;
-        ResponseEntity<TimeArrivalBus> responseAMandar;
+        ResponseEntity<String> responseAMandar;
 		String s;
 		try {
 			
@@ -35,23 +31,23 @@ public class PruebaController {
 
 			response = restTemplate.postForEntity(Variables.url.replace("{}", parada), request, String.class);
 			
-			GsonBuilder builder = new GsonBuilder(); 
+			//GsonBuilder builder = new GsonBuilder(); 
 			//builder.registerTypeAdapter(PointAdapter.class, new PointAdapter ()); 
-			Gson gson = builder.create();
+			//Gson gson = builder.create();
 			
 			s = response.getBody();
 			
 			//System.out.println(s);
-			
-			TimeArrivalBus t = gson.fromJson(s, TimeArrivalBus.class);
-			
-            responseAMandar = new ResponseEntity<>(t, HttpStatus.OK);
-
+			//TimeArrivalBus t = gson.fromJson(s, TimeArrivalBus.class);
+			//System.out.println(t.toString());
 			//System.out.println(t.toString().replaceAll(",", ",\n"));
+            
+			responseAMandar = new ResponseEntity<>(s, HttpStatus.OK);
 
-			
 		} catch (Exception e) {
+
 			responseAMandar = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
 		}
 		
 		
