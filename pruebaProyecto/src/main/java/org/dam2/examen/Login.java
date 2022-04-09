@@ -16,7 +16,6 @@ public class Login {
 		
 		try {
 			
-			
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("X-ClientId", Passwords.clientID);
 			headers.set("passKey", Passwords.passKey);

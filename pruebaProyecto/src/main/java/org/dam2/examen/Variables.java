@@ -23,7 +23,7 @@ public class Variables {
 	
 	public static String url= "https://openapi.emtmadrid.es/v1/transport/busemtmad/stops/{}/arrives//";
 	
-	public static String key = "b7a159e9-33f8-41bd-b61b-0529ba6643cd";
+	public static String key = "723e376c-b125-11ec-8e3f-02dc46018fe7";
 
 
 }

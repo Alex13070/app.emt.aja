@@ -1,5 +1,10 @@
 package org.dam2.examen;
 
+import java.lang.System.Logger;
+
+import com.google.gson.Gson;
+
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,8 +18,11 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/prueba")
 public class PruebaController {
-	
-	
+
+	//Logger logger = Logger.getLogger("MyLog");
+
+
+	@SuppressWarnings("unused")
 	@GetMapping ("/consultar/{parada}")
 	public ResponseEntity<String> consultarParada (@PathVariable String parada)
 	{
@@ -33,19 +41,20 @@ public class PruebaController {
 			
 			//GsonBuilder builder = new GsonBuilder(); 
 			//builder.registerTypeAdapter(PointAdapter.class, new PointAdapter ()); 
-			//Gson gson = builder.create();
+			Gson gson = new Gson();
 			
 			s = response.getBody();
 			
 			//System.out.println(s);
-			//TimeArrivalBus t = gson.fromJson(s, TimeArrivalBus.class);
+			TimeArrivalBus t = gson.fromJson(s, TimeArrivalBus.class);
 			//System.out.println(t.toString());
 			//System.out.println(t.toString().replaceAll(",", ",\n"));
             
 			responseAMandar = new ResponseEntity<>(s, HttpStatus.OK);
 
 		} catch (Exception e) {
-
+			//System.err.println("\n\n\n\nError" +  e.getMessage());
+			//e.printStackTrace();
 			responseAMandar = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		}
