@@ -35,7 +35,17 @@ public class PruebaQuery {
 	
 	
 	public static void main(String[] args) {
+
+		//prueba para ver que saca el json bien
+		PruebaController p =  new PruebaController();
+
+		String lista = p.listaParadas().getBody();
+
+		System.out.println(lista);
 		
+		//
+
+		/*
 		RestTemplate restTemplate = new RestTemplate();
 		
 		try {
@@ -58,12 +68,11 @@ public class PruebaQuery {
 			TimeArrivalBus t = gson.fromJson(s, TimeArrivalBus.class);
 			
 			System.out.println(t.toString().replaceAll(",", ",\n"));
-			
-			
-			
+
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
+		*/
 	}
 
 }
