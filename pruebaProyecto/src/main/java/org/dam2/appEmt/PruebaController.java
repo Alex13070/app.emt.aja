@@ -111,7 +111,7 @@ public class PruebaController {
 
 	@SuppressWarnings("unused")
 	@PostMapping("/login")
-	public String login(@RequestParam("user") String username, @RequestParam("password") String pwd) {
+	public ResponseEntity<String> login(@RequestParam("user") String username, @RequestParam("password") String pwd) {
 		
     	
     	String token = ""; 
@@ -119,7 +119,7 @@ public class PruebaController {
     	if (username.equals("client") && pwd.equals("client"))
     		token = getJWTToken(username);
 			
-		return token;
+		return new ResponseEntity<String>(token, HttpStatus.OK);
 		
 	}
 	private String getJWTToken(String username) {
