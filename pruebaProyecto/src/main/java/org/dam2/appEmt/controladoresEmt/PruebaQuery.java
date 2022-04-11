@@ -1,4 +1,4 @@
-package org.dam2.appEmt;
+package org.dam2.appEmt.controladoresEmt;
 
 public class PruebaQuery {
 

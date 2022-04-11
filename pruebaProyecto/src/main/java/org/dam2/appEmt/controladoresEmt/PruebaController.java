@@ -1,4 +1,4 @@
-package org.dam2.appEmt;
+package org.dam2.appEmt.controladoresEmt;
 
 import com.google.gson.Gson;
 
@@ -35,7 +35,7 @@ public class PruebaController {
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("accessToken", Variables.emtKey);
 			
-			HttpEntity<String> request = new HttpEntity<String>(Constantes.JSON, headers);
+			HttpEntity<String> request = new HttpEntity<String>(Constantes.JSON_TIME_ARRIVAL, headers);
 
 			response = restTemplate.postForEntity(Constantes.URL_TIME_ARRIVAL.replace("{}", parada), request, String.class);
 			
