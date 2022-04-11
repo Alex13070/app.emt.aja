@@ -1,37 +1,8 @@
 package org.dam2.appEmt;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 public class PruebaQuery {
-	
-	static String json = "{\r\n"
-			+ "		\"cultureInfo\":\"ES\",\r\n"
-			+ "		\"Text_StopRequired_YN\":\"Y\", \r\n"
-			+ "		\"Text_EstimationsRequired_YN\":\"Y\", \r\n"
-			+ "		\"Text_IncidencesRequired_YN\":\"Y\", \r\n"
-			+ "		\"DateTime_Referenced_Incidencies_YYYYMMDD\":\"????????\"\r\n"
-			+ "	}";
 
-	
-	/*
-	static String json = """
-	{
-		"cultureInfo":"ES",
-		"Text_StopRequired_YN":"Y", 
-		"Text_EstimationsRequired_YN":"Y", 
-		"Text_IncidencesRequired_YN":"Y", 
-		"DateTime_Referenced_Incidencies_YYYYMMDD":"????????"
-	}""";
-	*/
-	static String url= "https://openapi.emtmadrid.es/v1/transport/busemtmad/stops/5112/arrives//";
-	
-	static String key = "9a7e29b5-6dc8-4c89-b391-b50931e4dcda";
+	static String parada = "5111";
 	
 	
 	public static void main(String[] args) {
@@ -42,8 +13,6 @@ public class PruebaQuery {
 		String lista = p.listaParadas().getBody();
 
 		System.out.println(lista);
-		
-		//
 
 		/*
 		RestTemplate restTemplate = new RestTemplate();
@@ -51,11 +20,11 @@ public class PruebaQuery {
 		try {
 			
 			HttpHeaders headers = new HttpHeaders();
-			headers.set("accessToken", key);
+			headers.set("accessToken", Variables.emtKey);
 			
-			HttpEntity<String> request = new HttpEntity<String>(json, headers);
+			HttpEntity<String> request = new HttpEntity<String>(Constantes.JSON, headers);
 			
-			ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+			ResponseEntity<String> response = restTemplate.postForEntity(Constantes.URL_TIME_ARRIVAL.replace("{}", parada), request, String.class);
 			
 			GsonBuilder builder = new GsonBuilder(); 
 			//builder.registerTypeAdapter(PointAdapter.class, new PointAdapter ()); 

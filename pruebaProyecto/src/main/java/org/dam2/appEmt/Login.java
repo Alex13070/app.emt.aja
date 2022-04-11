@@ -1,5 +1,6 @@
 package org.dam2.appEmt;
 
+import org.dam2.appEmt.utilidades.Constantes;
 import org.dam2.appEmt.utilidades.Passwords;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,8 +10,6 @@ import org.springframework.web.client.RestTemplate;
 
 public class Login {
 	
-	static String url= "https://openapi.emtmadrid.es/v1/mobilitylabs/user/login/";
-	
 	public static void main(String[] args) {
 		
 		RestTemplate restTemplate = new RestTemplate();
@@ -18,14 +17,14 @@ public class Login {
 		try {
 			
 			HttpHeaders headers = new HttpHeaders();
-			headers.set("X-ClientId", Passwords.clientID);
-			headers.set("passKey", Passwords.passKey);
+			headers.set("X-ClientId", Passwords.CLIENT_ID);
+			headers.set("passKey", Passwords.PASS_KEY);
 			
 			headers.forEach((k,v) ->  System.out.println(k + " " + v));
 			
 			HttpEntity<String> request = new HttpEntity<String>("headrers", headers);
 			//HttpHeaders h = request.getHeaders();
-			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+			ResponseEntity<String> response = restTemplate.exchange(Constantes.URL_LOGIN, HttpMethod.GET, request, String.class);
 		
 			
 			//h.forEach((k,v) ->  System.out.println("h:" + k + " " + v));

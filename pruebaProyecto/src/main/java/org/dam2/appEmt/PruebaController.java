@@ -1,10 +1,9 @@
 package org.dam2.appEmt;
 
-import java.lang.System.Logger;
-
 import com.google.gson.Gson;
 
 import org.dam2.appEmt.modeloTimeArrival.TimeArrivalBus;
+import org.dam2.appEmt.utilidades.Constantes;
 import org.dam2.appEmt.utilidades.Variables;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -35,11 +33,11 @@ public class PruebaController {
 		try {
 			
 			HttpHeaders headers = new HttpHeaders();
-			headers.set("accessToken", Variables.key);
+			headers.set("accessToken", Variables.emtKey);
 			
-			HttpEntity<String> request = new HttpEntity<String>(Variables.JSON, headers);
+			HttpEntity<String> request = new HttpEntity<String>(Constantes.JSON, headers);
 
-			response = restTemplate.postForEntity(Variables.URL.replace("{}", parada), request, String.class);
+			response = restTemplate.postForEntity(Constantes.URL_TIME_ARRIVAL.replace("{}", parada), request, String.class);
 			
 			//GsonBuilder builder = new GsonBuilder(); 
 			//builder.registerTypeAdapter(PointAdapter.class, new PointAdapter ()); 
@@ -75,11 +73,11 @@ public class PruebaController {
 		try {
 			
 			HttpHeaders headers = new HttpHeaders();
-			headers.set("accessToken", Variables.key);
+			headers.set("accessToken", Variables.emtKey);
 			
 			HttpEntity<String> request = new HttpEntity<String>(headers);
 
-			response = restTemplate.postForEntity(Variables.URL_LISTA_PARADAS, request, String.class);
+			response = restTemplate.postForEntity(Constantes.URL_LISTA_PARADAS, request, String.class);
 
 			Gson gson = new Gson();
 			
