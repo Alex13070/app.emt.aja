@@ -31,9 +31,7 @@ import net.bytebuddy.asm.Advice.Unused;
 public class PruebaController {
 
 	//Logger logger = Logger.getLogger("MyLog");
-	private final String secret = "mySecretKey";
-	
-	private final long tiempo = 600000;
+
 
 	@SuppressWarnings("unused")
 	//@GetMapping ("/consultar/{parada}")
@@ -109,38 +107,5 @@ public class PruebaController {
 		return responseAMandar;
 	}
 
-	@SuppressWarnings("unused")
-	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestParam("user") String username, @RequestParam("password") String pwd) {
-		
-    	
-    	String token = ""; 
-    	//comprobariamos en la base de datos
-    	if (username.equals("client") && pwd.equals("client"))
-    		token = getJWTToken(username);
-			
-		return new ResponseEntity<String>(token, HttpStatus.OK);
-		
-	}
-	private String getJWTToken(String username) {
-
-
-		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-				.commaSeparatedStringToAuthorityList("CLIENT");
-		
-		String token = Jwts
-				.builder()
-				.setId("EmpAJA")
-				.setSubject(username)
-				.claim("authorities",
-						grantedAuthorities.stream()
-								.map(GrantedAuthority::getAuthority)
-								.collect(Collectors.toList()))
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + tiempo))
-				.signWith(SignatureAlgorithm.HS512,
-						secret.getBytes()).compact();
-
-		return "Bearer " + token;
-	}
+	
 }
