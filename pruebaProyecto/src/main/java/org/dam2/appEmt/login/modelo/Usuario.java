@@ -14,17 +14,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.validation.annotation.Validated;
+//import org.springframework.validation.annotation.Validated;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
@@ -34,7 +36,7 @@ import lombok.NonNull;
 @Entity
 public class Usuario implements Serializable{
 
-    @NonNull
+    @NotNull
 	@EqualsAndHashCode.Include
 	@Id
     @Pattern(regexp = "^[^@]+@[^@]+\\.[a-zA-Z]{2,}$", message = "Formato de correo no valido")
@@ -53,25 +55,34 @@ public class Usuario implements Serializable{
         .{8, 20} represents at least 8 characters and at most 20 characters.
         $ represents the end of the string.
     */
+
     @Min(value = 8, message = "Demasiado corta")
     @Max(value = 12, message = "Demasiado larga")
+    @NotBlank
     @Pattern(regexp =  "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$", message = "Condiciones de clave") 
     private String clave;
 
-    @Length(max = 20)
+
+    @Length(max = 20, message = "Nombre demasiado largo")
+    @NotBlank
     private String nombre;
 
-    @Length(max = 30)
+    @Length(max = 30, message = "Apellido demasiado largo")
+    @NotBlank
     private String apellidos;
 
     //@Validated(value = ValidarFecha.class)
+    @Past(message = "La fecha tiene que ser anterior a la actual")
+    @NotNull
     private LocalDate fechaNacimiento;
     
     @Enumerated(value = EnumType.STRING)
     private Sexo sexo;
 
+    /*
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name="FK_USUARIO")
     private List<Favorito> favoritos;
+    */
     
 }
