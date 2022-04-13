@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.dam2.appEmt.login.modelPeticion.LoginRequest;
+import org.dam2.appEmt.login.modelPeticion.LoginResponse;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,16 +86,17 @@ public class UsuarioController {
     */
     @SuppressWarnings("unused")
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestParam("correo") String correo, @RequestParam("clave") String clave) {
-		
+	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+		//@RequestParam("correo") String correo, @RequestParam("clave") String clave
     	
     	String token = ""; 
         //comprobariamos en la base de datos
         //if(servicioUsuario.findByCorreoAndClave(correo, clave).isPresent())
-    	if (correo.equals("client") && clave.equals("client"))
-            token = getJWTToken(correo);
+        //correo.equals("client") && clave.equals("client")
+    	if (request.getCorreo().equals("client") && request.getClave().equals("client"))
+            token = getJWTToken(request.getCorreo());
 			
-		return new ResponseEntity<String>(token, HttpStatus.OK);
+		return new ResponseEntity<LoginResponse>(new LoginResponse(token), HttpStatus.OK);
 		
 	}
 	private String getJWTToken(String username) {
