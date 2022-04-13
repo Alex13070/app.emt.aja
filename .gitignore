@@ -1,0 +1,6 @@
+# Ignora todos los archivos de texto, para quitar la lista de las pardas
+# la lista tendra el nombre que sea .txt
+# estara en la carpeta datos
+*.txt
+
+# importante cambiar la ubicacion para leer el archivo a donde se encuentre
