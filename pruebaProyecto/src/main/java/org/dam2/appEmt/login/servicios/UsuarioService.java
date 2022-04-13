@@ -50,6 +50,13 @@ public class UsuarioService implements IUsuarioService {
         return daoUsuario.findById(id);
     }
 
+    @Override
+    public Optional<Usuario> findByCorreoAndClave(String correo, String clave) {
+        
+        return daoUsuario.findByCorreoAndClave(correo, clave);
+    }
+
+    
     /*
     @Override
     public List<Favorito> obtenerFavoritos(String id) {

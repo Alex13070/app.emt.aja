@@ -84,13 +84,14 @@ public class UsuarioController {
     */
     @SuppressWarnings("unused")
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestParam("user") String username, @RequestParam("password") String pwd) {
+	public ResponseEntity<String> login(@RequestParam("correo") String correo, @RequestParam("clave") String clave) {
 		
     	
     	String token = ""; 
-    	//comprobariamos en la base de datos
-    	if (username.equals("client") && pwd.equals("client"))
-    		token = getJWTToken(username);
+        //comprobariamos en la base de datos
+        //if(servicioUsuario.findByCorreoAndClave(correo, clave).isPresent())
+    	if (correo.equals("client") && clave.equals("client"))
+            token = getJWTToken(correo);
 			
 		return new ResponseEntity<String>(token, HttpStatus.OK);
 		
@@ -103,7 +104,7 @@ public class UsuarioController {
 		
 		String token = Jwts
 				.builder()
-				.setId("EmpAJA")
+				.setId("EmtAJA")
 				.setSubject(username)
 				.claim("authorities",
 						grantedAuthorities.stream()
