@@ -5,14 +5,22 @@ import org.dam2.appEmt.utilidades.Passwords;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+@RestController
+@RequestMapping("/sesion-emt")
 public class Login {
 	
-	public static void main(String[] args) {
+	@PostMapping("/login")
+	public ResponseEntity<String> login() {
 		
 		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> respuesta;
 		
 		try {
 			
@@ -31,14 +39,19 @@ public class Login {
 			
 			String s = response.getBody();
 			
-			System.out.println(sacarToken(s));
+			String token = sacarToken(s);
+
+			respuesta = new ResponseEntity<>(token, HttpStatus.OK);
 			
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
+			respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
+
+		return respuesta;
 	}
 
-    public static String sacarToken(String json) {
+    private static String sacarToken(String json) {
 
         String[] array = json.split("\"accessToken\": \"");
         return array[1].substring(0, array[1].indexOf("\"")).trim();

@@ -1,9 +1,8 @@
 package org.dam2.appEmt.controladoresEmt;
 
 public class PruebaQuery {
-
+	/*
 	static String parada = "5111";
-	
 	
 	public static void main(String[] args) {
 
@@ -14,7 +13,7 @@ public class PruebaQuery {
 
 		System.out.println(lista);
 
-		/*
+		
 		RestTemplate restTemplate = new RestTemplate();
 		
 		try {
@@ -41,7 +40,7 @@ public class PruebaQuery {
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-		*/
+		
 	}
-
+	*/
 }
