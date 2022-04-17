@@ -18,10 +18,10 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class})
-public class PruebaProyectoApplication {
+public class App {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PruebaProyectoApplication.class, args);
+		SpringApplication.run(App.class, args);
 	}
 
 	/*
