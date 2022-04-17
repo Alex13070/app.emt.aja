@@ -59,7 +59,7 @@ public class Usuario implements Serializable{
     @Min(value = 8, message = "Demasiado corta")
     @Max(value = 12, message = "Demasiado larga")
     @NotBlank
-    @Pattern(regexp =  "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$", message = "Condiciones de clave") 
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$", message = "Condiciones de clave") 
     private String clave;
 
 

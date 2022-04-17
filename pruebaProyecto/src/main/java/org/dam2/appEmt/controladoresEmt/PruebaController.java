@@ -3,9 +3,11 @@ package org.dam2.appEmt.controladoresEmt;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+// import java.io.IOException;
+// import java.util.Date;
+// import java.util.List;
+// import java.util.logging.Logger;
+// import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
@@ -16,18 +18,18 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
+// import org.springframework.security.core.GrantedAuthority;
+// import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+// import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import net.bytebuddy.asm.Advice.Unused;
+// import io.jsonwebtoken.Jwts;
+// import io.jsonwebtoken.SignatureAlgorithm;
+// import net.bytebuddy.asm.Advice.Unused;
 
 @RestController
 @RequestMapping("/prueba")
@@ -87,11 +89,13 @@ public class PruebaController {
 		ResponseEntity<String> response;
         ResponseEntity<String> responseAMandar;
 		String s;
-		try {
-			
-			File archivo = new File (Variables.urlListaParadas);
+		File archivo = new File (Variables.urlListaParadas);
+		
+		try(
 			FileReader fr = new FileReader (archivo);
 			BufferedReader br = new BufferedReader(fr);
+		){
+			
 			
 			String linea;
 			StringBuffer textoParadas = new StringBuffer();
@@ -101,9 +105,12 @@ public class PruebaController {
 
 			responseAMandar = new ResponseEntity<>(textoParadas.toString(), HttpStatus.OK);
 
+
+
 		} catch (Exception e) {
 			responseAMandar = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+
 		return responseAMandar;
 	}
 

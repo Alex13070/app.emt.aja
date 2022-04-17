@@ -1,5 +1,7 @@
 package org.dam2.appEmt.login.modelo;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,7 +26,7 @@ import lombok.NonNull;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 @Entity
-public class Favorito {
+public class Favorito implements Serializable{
 
     @NonNull
 	@EqualsAndHashCode.Include

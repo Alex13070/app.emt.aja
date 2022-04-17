@@ -1,5 +1,6 @@
 package org.dam2.appEmt.configuration;
 
+/*
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,12 +52,13 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 		String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
 		return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(jwtToken).getBody();
 	}
-
+	*/
 	/**
 	 * Metodo para autenticarnos dentro del flujo de Spring
 	 * 
 	 * @param claims
 	 */
+																	/* 
 	private void setUpSpringAuthentication(Claims claims) {
 		@SuppressWarnings("unchecked")
 		List<String> authorities = (List<String>) claims.get("authorities");
@@ -75,3 +77,4 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 	}
 
 }
+																	*/

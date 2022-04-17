@@ -1,10 +1,10 @@
 package org.dam2.appEmt.login.servicios;
 
-import java.lang.StackWalker.Option;
-//import java.util.List;
+// import java.lang.StackWalker.Option;
+// import java.util.List;
 import java.util.Optional;
 
-//import org.dam2.appEmt.login.modelo.Favorito;
+// import org.dam2.appEmt.login.modelo.Favorito;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.springframework.stereotype.Service;
 

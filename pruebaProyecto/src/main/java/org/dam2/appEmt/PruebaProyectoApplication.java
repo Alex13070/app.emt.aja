@@ -1,18 +1,23 @@
-package org.dam2.appEmt.controladoresEmt;
+package org.dam2.appEmt;
 
-import org.dam2.appEmt.configuration.JWTAuthorizationFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+// import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+// import org.springframework.context.annotation.Configuration;
+// import org.springframework.http.HttpMethod;
+// import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+// import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+// import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+// import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+// import org.springframework.context.annotation.Configuration;
+// import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
+// import org.dam2.appEmt.configuration.JWTAuthorizationFilter;
+
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class})
 public class PruebaProyectoApplication {
 
 	public static void main(String[] args) {
@@ -40,7 +45,7 @@ public class PruebaProyectoApplication {
 	vemos a ver que tal.
 
 	*/
-
+	/*
 	@EnableWebSecurity
 	@Configuration
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -54,5 +59,6 @@ public class PruebaProyectoApplication {
 				.anyRequest().authenticated();
 		}
 	}
+	*/
 
 }

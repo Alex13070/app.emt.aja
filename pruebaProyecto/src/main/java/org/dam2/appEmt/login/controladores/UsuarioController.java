@@ -1,37 +1,39 @@
 package org.dam2.appEmt.login.controladores;
 
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+// import java.util.Date;
+// import java.util.List;
+// import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.dam2.appEmt.login.modelPeticion.LoginRequest;
-import org.dam2.appEmt.login.modelPeticion.LoginResponse;
+// import org.dam2.appEmt.login.modelPeticion.LoginRequest;
+// import org.dam2.appEmt.login.modelPeticion.LoginResponse;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+// import org.springframework.security.core.GrantedAuthority;
+// import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+//import io.jsonwebtoken.Jwts;
+//import io.jsonwebtoken.SignatureAlgorithm;
 
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
     
-    
+    @SuppressWarnings("unused")
     private final String secret = "mySecretKey";
 	
+    @SuppressWarnings("unused")
 	private final long tiempo = 600000;
     
     @Autowired
@@ -84,6 +86,8 @@ public class UsuarioController {
     }
 
     */
+
+    /*
     @SuppressWarnings("unused")
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
@@ -99,6 +103,10 @@ public class UsuarioController {
 		return new ResponseEntity<LoginResponse>(new LoginResponse(token), HttpStatus.OK);
 		
 	}
+
+    */
+    
+    /*
 	private String getJWTToken(String username) {
 
 
@@ -120,4 +128,15 @@ public class UsuarioController {
 
 		return "Bearer " + token;
 	}
+
+    */
+
+
+    @GetMapping("/funciona")
+    public ResponseEntity<String> actualizarUsuario() {
+
+        return new ResponseEntity<>("Funciono", HttpStatus.OK);
+
+    }
+
 }

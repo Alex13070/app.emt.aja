@@ -1,5 +1,5 @@
 package org.dam2.appEmt.configuration;
-
+/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,12 +17,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /*http.csrf().disable()
-            .authorizeRequests()
-            .anyRequest()
-            .hasRole("CLIENT")    
-            .and().httpBasic();
-        */
+        // http.csrf().disable()
+        //     .authorizeRequests()
+        //     .anyRequest()
+        //     .hasRole("CLIENT")    
+        //     .and().httpBasic();
+        
     	System.out.println("ejecutando SecurityConfig");
     	http.csrf().disable().
     		addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class).
@@ -51,3 +51,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .roles("CLIENT");
     }
 }
+*/

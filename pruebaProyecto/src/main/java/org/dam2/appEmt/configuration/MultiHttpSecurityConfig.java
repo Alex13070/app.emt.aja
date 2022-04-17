@@ -1,5 +1,5 @@
 package org.dam2.appEmt.configuration;
-
+/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableWebSecurity
+//@EnableWebSecurity
 public class MultiHttpSecurityConfig {
 
 	@Autowired
@@ -29,7 +29,7 @@ public class MultiHttpSecurityConfig {
     }
 	
 	 @Configuration
-     @Order(1)  
+     //@Order(1)  
 	 public static class SecurityConfigToken extends WebSecurityConfigurerAdapter {
 	
 		 @Override
@@ -66,4 +66,4 @@ public class MultiHttpSecurityConfig {
 	 
 	 
 	
-}
+}*/

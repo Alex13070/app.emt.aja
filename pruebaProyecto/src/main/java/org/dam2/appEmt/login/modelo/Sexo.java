@@ -1,5 +1,8 @@
 package org.dam2.appEmt.login.modelo;
 
-public enum Sexo {
+import java.io.Serializable;
+
+
+public enum Sexo implements Serializable {
     HOMBRE, MUJER, NO_ESPECIFICADO;
 }
