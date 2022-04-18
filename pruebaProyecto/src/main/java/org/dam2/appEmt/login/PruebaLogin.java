@@ -29,15 +29,16 @@ public class PruebaLogin {
         try {
 
             RestTemplate restTemplate = new RestTemplate ();
-            ResponseEntity<Usuario> response = restTemplate.postForEntity(INSERTAR, usuario, Usuario.class);
+            HttpEntity<Usuario> request = new HttpEntity<>(usuario);
+            ResponseEntity<Usuario> response = restTemplate.exchange(INSERTAR, HttpMethod.POST, request, Usuario.class);
 
             System.out.println(response.getBody()); 
 
             usuario.setNombre("Pepe");
             
-            HttpEntity<Usuario> request = new HttpEntity<>(usuario);
+            HttpEntity<Usuario> request2 = new HttpEntity<>(usuario);
             
-            ResponseEntity<Usuario> response2 = restTemplate.exchange(ACTUALIZAR, HttpMethod.PUT, request, Usuario.class);
+            ResponseEntity<Usuario> response2 = restTemplate.exchange(ACTUALIZAR, HttpMethod.PUT, request2, Usuario.class);
 
             System.out.println(response2.getBody());
 
