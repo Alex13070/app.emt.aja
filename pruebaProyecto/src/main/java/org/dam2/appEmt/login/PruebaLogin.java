@@ -11,7 +11,8 @@ import org.springframework.web.client.RestTemplate;
 
 public class PruebaLogin {
     
-    private static String url = "http://localhost:8080/usuario/{}";
+    private final static String INSERTAR = "http://localhost:8080/usuario/insertar";
+    private final static String ACTUALIZAR = "http://localhost:8080/usuario/actualizar";
 
     public static void main(String[] args) {
 
@@ -28,7 +29,7 @@ public class PruebaLogin {
         try {
 
             RestTemplate restTemplate = new RestTemplate ();
-            ResponseEntity<Usuario> response = restTemplate.postForEntity(url.replace("{}", "insertar"), usuario, Usuario.class);
+            ResponseEntity<Usuario> response = restTemplate.postForEntity(INSERTAR, usuario, Usuario.class);
 
             System.out.println(response.getBody()); 
 
@@ -36,7 +37,7 @@ public class PruebaLogin {
             
             HttpEntity<Usuario> request = new HttpEntity<>(usuario);
             
-            ResponseEntity<Usuario> response2 = restTemplate.exchange(url.replace("{}", "actualizar"), HttpMethod.PUT, request, Usuario.class);
+            ResponseEntity<Usuario> response2 = restTemplate.exchange(ACTUALIZAR, HttpMethod.PUT, request, Usuario.class);
 
             System.out.println(response2.getBody());
 
