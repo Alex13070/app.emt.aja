@@ -15,6 +15,7 @@ public interface IUsuarioService {
     boolean update(Usuario usuario);
     Optional<Usuario> findById(String id);
     Optional<Usuario> findByCorreoAndClave(String correo,String clave);
+    boolean existsById(String id);
    
     //List<Favorito> obtenerFavoritos(String id); 
     //boolean delete(Usuario usuario);    

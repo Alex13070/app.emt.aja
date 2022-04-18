@@ -28,6 +28,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,30 +38,17 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Usuario implements Serializable{
 
+    @NotBlank
     @NotNull
 	@EqualsAndHashCode.Include
 	@Id
     @Pattern(regexp = "^[^@]+@[^@]+\\.[a-zA-Z]{2,}$", message = "Formato de correo no valido")
 	private String correo;
 
-    /*
-
-        <b> Condidiones de la clave </b>
-
-        ^ represents starting character of the string.
-        (?=.*[0-9]) represents a digit must occur at least once.
-        (?=.*[a-z]) represents a lower case alphabet must occur at least once.
-        (?=.*[A-Z]) represents an upper case alphabet that must occur at least once.
-        (?=.*[@#$%^&-+=()] represents a special character that must occur at least once.
-        (?=\\S+$) white spaces don’t allowed in the entire string.
-        .{8, 20} represents at least 8 characters and at most 20 characters.
-        $ represents the end of the string.
-    */
-
-    @Min(value = 8, message = "Demasiado corta")
-    @Max(value = 12, message = "Demasiado larga")
+    //Entre 8 y 12 caracteres, una mayuscula, una minuscula, un numero y un caracter especial
+    @Length(min = 8, max = 12, message = "La clave debe tener entre 8 y 12 caracteres")
     @NotBlank
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$", message = "Condiciones de clave") 
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,12}$", message = "La clave no coincide con los requisitos")
     private String clave;
 
 
@@ -77,6 +66,7 @@ public class Usuario implements Serializable{
     private LocalDate fechaNacimiento;
     
     @Enumerated(value = EnumType.STRING)
+    @NotNull
     private Sexo sexo;
 
     /*

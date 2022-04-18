@@ -56,6 +56,11 @@ public class UsuarioService implements IUsuarioService {
         return daoUsuario.findByCorreoAndClave(correo, clave);
     }
 
+    @Override
+    public boolean existsById(String id) {
+        return daoUsuario.existsById(id);
+    }
+
     
     /*
     @Override
