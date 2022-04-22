@@ -66,10 +66,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+            .antMatchers("/**/**").hasRole("ADMIN")
             .antMatchers("/**").hasRole("ADMIN")//El usuario administrador puede acceder a cualquier cosa 
-            //.anyRequest().authenticated()//any other request just need authentication
-            .and()
-            .formLogin();//enable form login
+            .anyRequest().authenticated();//any other request just need authentication
+            //.and()
+            //.formLogin();//enable form login
     }
 
 }

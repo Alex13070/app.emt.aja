@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginRequest implements Serializable {
 
-	
-	    private String correo;
-
-	    
-	    private String clave;
+	private String correo;
+    private String clave;
 }
