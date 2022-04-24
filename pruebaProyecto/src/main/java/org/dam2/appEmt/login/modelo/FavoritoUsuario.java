@@ -1,14 +1,13 @@
 package org.dam2.appEmt.login.modelo;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Length;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,17 +21,19 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 @Entity
-public class Favorito implements Serializable{
-
+public class FavoritoUsuario {
+    
     @Id
     @NotNull
 	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
-    private String idParada;
-    
-    @Length(max = 30)
-    private String nombreParada;
-    
+    @ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_usuario")
+    private Usuario usuario;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_favorito")
+    private Favorito favorito;
 }

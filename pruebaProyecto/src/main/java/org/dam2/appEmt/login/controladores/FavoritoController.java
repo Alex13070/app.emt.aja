@@ -38,6 +38,9 @@ public class FavoritoController {
     @Autowired
     private IUsuarioService usuarioService;
 
+    @Autowired
+    private IFavoritoUsuarioService favoritoUsuarioService;
+
 
     /**
      * Controlador encargado de guardar favoritos en la base de datos
@@ -114,14 +117,15 @@ public class FavoritoController {
      * @return {@true 202 accepted y coleccion de favoritos del usuario}
      *         {@false 400 bad request}
      */
+    
     @GetMapping("/obtener-favoritos")
-    public ResponseEntity<List<Favorito>> actualizarUsuario(@RequestParam String id) {
+    public ResponseEntity<List<Favorito>> actualizarUsuario(@RequestParam Long id) {
 
         ResponseEntity<List<Favorito>> respuesta;
 
         if (usuarioService.existsById(id)){
             logger.info("Obtencion de favoritos de usuarios");
-            List<Favorito> favoritos = favoritoService.obtenerFavoritos(id);
+            List<Favorito> favoritos = favoritoUsuarioService.obtenerFavoritos(id);
             respuesta = new ResponseEntity<>(favoritos, HttpStatus.ACCEPTED);
         }
         else {
@@ -132,4 +136,5 @@ public class FavoritoController {
         return respuesta;
 
     }
+    
 }

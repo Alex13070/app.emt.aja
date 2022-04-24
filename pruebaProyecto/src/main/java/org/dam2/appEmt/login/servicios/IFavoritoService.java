@@ -9,6 +9,7 @@ public interface IFavoritoService {
     boolean save (Favorito favorito);
     boolean update (Favorito favorito);
     boolean delete (Favorito favorito);
-    List<Favorito> obtenerFavoritos (String id);
 
+    //Pruebas
+    List<Favorito> findAll();
 }

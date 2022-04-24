@@ -1,5 +1,6 @@
 package org.dam2.appEmt.login.servicios;
 
+import java.util.List;
 //import java.util.ArrayList;
 //import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class UsuarioService implements IUsuarioService {
     public boolean insert(Usuario usuario) {
         boolean exito = false;
 
-        if (!daoUsuario.existsById(usuario.getCorreo())) {
+        if (!daoUsuario.existsById(usuario.getId())) {
             daoUsuario.save(usuario);
             exito = true;
         }
@@ -36,7 +37,7 @@ public class UsuarioService implements IUsuarioService {
     public boolean update(Usuario usuario) {
         boolean exito = false;
 
-        if (daoUsuario.existsById(usuario.getCorreo())) {
+        if (daoUsuario.existsById(usuario.getId())) {
 
             daoUsuario.save(usuario);
             exito = true;
@@ -46,7 +47,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public Optional<Usuario> findById(String id) {
+    public Optional<Usuario> findById(Long id) {
         return daoUsuario.findById(id);
     }
 
@@ -57,8 +58,13 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public boolean existsById(String id) {
+    public boolean existsById(Long id) {
         return daoUsuario.existsById(id);
+    }
+
+    @Override
+    public List<Usuario> findAll() {
+        return (List<Usuario>) daoUsuario.findAll();
     }
 
     
