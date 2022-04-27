@@ -2,10 +2,8 @@ package org.dam2.appEmt.login.modelo;
 
 import java.io.Serializable;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
@@ -24,15 +22,12 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Favorito implements Serializable{
 
-    @Id
+    @EmbeddedId
     @NotNull
-	@EqualsAndHashCode.Include
-	@GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    private String idParada;
+    private FavoritoPK id;
     
     @Length(max = 30)
     private String nombreParada;
     
+
 }

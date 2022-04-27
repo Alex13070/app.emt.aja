@@ -1,8 +1,7 @@
 package org.dam2.appEmt.login.servicios;
 
-import java.util.List;
-
 import org.dam2.appEmt.login.modelo.Favorito;
+import org.dam2.appEmt.login.modelo.FavoritoPK;
 import org.dam2.appEmt.login.repositorio.FavoritoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,11 +38,11 @@ public class FavoritoService implements IFavoritoService{
     }
 
     @Override
-    public boolean delete(Favorito fav) {
+    public boolean delete(FavoritoPK fav) {
         boolean exito = false;
         
-        if (daoFavorito.existsById(fav.getId())){
-            daoFavorito.delete(fav);
+        if (daoFavorito.existsById(fav)){
+            daoFavorito.deleteById(fav);
             exito = true;
         } 
         
@@ -51,8 +50,8 @@ public class FavoritoService implements IFavoritoService{
     }
 
     @Override
-    public List<Favorito> findAll() {
-        return (List<Favorito>) daoFavorito.findAll();
+    public Favorito[] findAllByUser(Long id) {
+        return daoFavorito.obtenerFavoritosPorUsuario(id);
     }
 
     

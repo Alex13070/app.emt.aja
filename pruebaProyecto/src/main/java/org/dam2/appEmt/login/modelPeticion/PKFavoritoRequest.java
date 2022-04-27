@@ -1,8 +1,5 @@
 package org.dam2.appEmt.login.modelPeticion;
 
-
-import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginResponse implements Serializable {
+public class PKFavoritoRequest {
 
-	private String token;
-	
+    private Long idUsuario;
+
+    private String idParada;
 }

@@ -1,11 +1,16 @@
 package org.dam2.appEmt.login.controladores;
 
+import java.util.Optional;
+
 // import java.util.Date;
 // import java.util.List;
 // import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.dam2.appEmt.configuration.MD5;
+import org.dam2.appEmt.login.modelPeticion.LoginRequest;
+import org.dam2.appEmt.login.modelPeticion.LoginResponse;
 // import org.dam2.appEmt.login.modelPeticion.LoginRequest;
 // import org.dam2.appEmt.login.modelPeticion.LoginResponse;
 import org.dam2.appEmt.login.modelo.Usuario;
@@ -15,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 // import org.springframework.security.core.GrantedAuthority;
 // import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,6 +60,15 @@ public class UsuarioController {
     @Autowired
     private IUsuarioService servicioUsuario;
 
+    ///Pruebas
+    /*
+    @Autowired
+    private FavoritoRepository daoFavorito;
+
+    @Autowired 
+    private UsuarioRepository daoUsuario;
+    */
+
     /**
      * Controlador para insertar usuarios a la base de datos
      * @param usuario Usuario a insertar
@@ -67,14 +80,24 @@ public class UsuarioController {
 
         ResponseEntity<Usuario> respuesta;
 
-        if (servicioUsuario.insert(usuario)) {
-            logger.info("Usuario insertado");
-            respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
+        try {
+            
+            if (servicioUsuario.insert(usuario)) {
+                respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
+                logger.info("Usuario insertado");
+            }
+            else {
+                logger.info("Error: El usuario ya existe");
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);   
+            }
+
         }
-        else {
+        catch (Exception e) {
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
             logger.error("Error al insertar usuario");
-            respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);   
         }
+
+
         return respuesta;
     }
 
@@ -90,34 +113,63 @@ public class UsuarioController {
 
         ResponseEntity<Usuario> respuesta;
 
-        if (servicioUsuario.update(usuario)) {
-            logger.info("Usuario actualizado");
-            respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
+        try {
+            if (servicioUsuario.update(usuario)) {
+                logger.info("Usuario actualizado");
+                respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
+            }
+            else {
+                logger.info("El usuario no existe");
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
-        else {
+        catch (Exception e) {
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
             logger.error("Error al actualizar usuario");
-            respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return respuesta;
 
     }
 
-    /*
-    @GetMapping("/obtener-favoritos")
-    public ResponseEntity<List<Favorito>> actualizarUsuario(@RequestParam String id) {
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> loginUsuario(@RequestBody LoginRequest entity) {
 
-        ResponseEntity<List<Favorito>> respuesta;
+        ResponseEntity<LoginResponse> respuesta;
 
-        List<Favorito> favoritos = servicioUsuario.obtenerFavoritos(id);
+        try {
 
-        respuesta = new ResponseEntity<>(favoritos, HttpStatus.ACCEPTED);
+            Optional<Usuario> usuario = servicioUsuario.findByCorreoAndClave(entity.getCorreo(), MD5.encriptar(entity.getClave()));
+
+            if (usuario.isPresent()) {
+                
+                //Crear token
+                String token = "";
+                
+                LoginResponse responseEntity = new LoginResponse(token);
+
+                //Guardar en la base de datos, en la tabla de Keys
+                logger.info("Se ha hecho login");
+                respuesta = new ResponseEntity<>(responseEntity, HttpStatus.ACCEPTED);
+            }
+            else {
+                logger.info("El usuario no existe");
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        catch (Exception e) {
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+            logger.error("Error al actualizar usuario");
+        }
 
         return respuesta;
 
     }
 
-    */
+
+
+
+    
 
     /*
     @SuppressWarnings("unused")
@@ -163,13 +215,53 @@ public class UsuarioController {
 
     */
 
-    
+    /*
     @GetMapping("/funciona")
     public ResponseEntity<String> actualizarUsuario() {
 
-        return new ResponseEntity<>("Funciono", HttpStatus.OK);
+        Usuario usuario = Usuario.builder()
+            .correo("correo@correo.com")
+            .clave("Usisis12!f")
+            .nombre("pepe")
+            .apellidos("Pepepe")
+            .fechaNacimiento(LocalDate.of(2002, 12, 12))
+            .sexo(Sexo.HOMBRE)
+            .build();
+
+
+        daoUsuario.save(usuario);
+
+
+        logger.info("Insertando usuaurio");
+
+        Favorito fav = Favorito.builder()
+            .id(
+                FavoritoPK.builder()
+                    .idFavorito("5111")
+                    .usuario(usuario).build()
+                ).
+            nombreParada("Parada")
+            .build();
+
+            Favorito fav2 = Favorito.builder()
+            .id(
+                FavoritoPK.builder()
+                    .idFavorito("5111")
+                    .usuario(usuario).build()
+                ).
+            nombreParada("Parada")
+            .build();
+
+        //Usuario.builder().id(2345L).build();
+
+        daoFavorito.save(fav);
+        daoFavorito.save(fav2);
+
+        daoFavorito.findAll().forEach(System.out::println);
+
+        return new ResponseEntity<>("Ayuda porfavor", HttpStatus.OK);
 
     }
-    
+    */
 }
 

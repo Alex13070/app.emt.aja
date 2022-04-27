@@ -1,6 +1,6 @@
 package org.dam2.appEmt.login.servicios;
 
-import java.util.List;
+//import java.util.List;
 //import java.util.ArrayList;
 //import java.util.List;
 import java.util.Optional;
@@ -62,11 +62,12 @@ public class UsuarioService implements IUsuarioService {
         return daoUsuario.existsById(id);
     }
 
+    /*
     @Override
     public List<Usuario> findAll() {
         return (List<Usuario>) daoUsuario.findAll();
     }
-
+    */
     
     /*
     @Override
