@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * UsuarioService
  */
 
- @Service
+@Service
 public class UsuarioService implements IUsuarioService {
 
     @Autowired

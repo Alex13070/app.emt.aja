@@ -31,7 +31,4 @@ public class TimeArrivalBus {
 		this.datetime = null;
 		this.data = new ArrayList<Data>();
 	}
-	
-	
-
 }

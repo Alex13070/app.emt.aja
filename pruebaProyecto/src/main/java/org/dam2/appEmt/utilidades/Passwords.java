@@ -5,7 +5,7 @@ public class Passwords {
     /*
      *  Id de cliente de la emt
      */
-    public static final String CLIENT_ID = "ae534b62-0a61-472d-a8a0-32846c6322f0";
+    public static final String CLIENT_ID = "3439c54a-c4d9-11ec-aaea-02dc46c512f7";
 
     /*
 	 *	API key de la emt
