@@ -1,11 +1,7 @@
 package org.dam2.appEmt.login.servicios;
 
-//import java.util.List;
-//import java.util.ArrayList;
-//import java.util.List;
 import java.util.Optional;
 
-//import org.dam2.appEmt.login.modelo.Favorito;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.login.repositorio.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +21,7 @@ public class UsuarioService implements IUsuarioService {
     public boolean insert(Usuario usuario) {
         boolean exito = false;
 
-        if (!daoUsuario.existsById(usuario.getId())) {
+        if (!daoUsuario.existsById(usuario.getCorreo())) {
             daoUsuario.save(usuario);
             exito = true;
         }
@@ -37,7 +33,7 @@ public class UsuarioService implements IUsuarioService {
     public boolean update(Usuario usuario) {
         boolean exito = false;
 
-        if (daoUsuario.existsById(usuario.getId())) {
+        if (daoUsuario.existsById(usuario.getCorreo())) {
 
             daoUsuario.save(usuario);
             exito = true;
@@ -47,7 +43,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public Optional<Usuario> findById(Long id) {
+    public Optional<Usuario> findById(String id) {
         return daoUsuario.findById(id);
     }
 
@@ -58,7 +54,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public boolean existsById(Long id) {
+    public boolean existsById(String id) {
         return daoUsuario.existsById(id);
     }
 
@@ -67,20 +63,5 @@ public class UsuarioService implements IUsuarioService {
     public List<Usuario> findAll() {
         return (List<Usuario>) daoUsuario.findAll();
     }
-    */
-    
-    /*
-    @Override
-    public List<Favorito> obtenerFavoritos(String id) {
-        List<Favorito> resultado = new ArrayList<>();
-
-        if (daoUsuario.existsById(id)){
-            resultado = daoUsuario.obtenerFavoritos(id);
-        }
-
-        return resultado;
-                
-    }
-    */
-    
+    */    
 }

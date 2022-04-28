@@ -50,7 +50,7 @@ public class FavoritoService implements IFavoritoService{
     }
 
     @Override
-    public Favorito[] findAllByUser(Long id) {
+    public Favorito[] findAllByUser(String id) {
         return daoFavorito.obtenerFavoritosPorUsuario(id);
     }
 

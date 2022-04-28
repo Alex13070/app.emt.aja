@@ -2,25 +2,18 @@ package org.dam2.appEmt.login.modelo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-// import java.util.List;
 
 import javax.persistence.Column;
-// import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-// import javax.persistence.JoinColumn;
-// import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
-//import org.springframework.validation.annotation.Validated;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,11 +32,6 @@ import lombok.NoArgsConstructor;
 public class Usuario implements Serializable{
 
     @Id
-    @NotNull
-	@EqualsAndHashCode.Include
-	@GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
     @NotBlank
     @NotNull
 	@EqualsAndHashCode.Include
@@ -74,11 +62,5 @@ public class Usuario implements Serializable{
     @Enumerated(value = EnumType.STRING)
     @NotNull
     private Sexo sexo;
-
-    /*
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name="FK_USUARIO")
-    private List<Favorito> favoritos;
-    */
     
 }

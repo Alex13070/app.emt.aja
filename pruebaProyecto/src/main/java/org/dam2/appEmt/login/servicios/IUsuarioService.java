@@ -7,9 +7,9 @@ public interface IUsuarioService {
     
     boolean insert(Usuario usuario);
     boolean update(Usuario usuario);
-    Optional<Usuario> findById(Long id);
+    Optional<Usuario> findById(String id);
     Optional<Usuario> findByCorreoAndClave(String correo, String clave);
-    boolean existsById(Long id);
+    boolean existsById(String id);
    
     // Pruebas
     //List<Usuario> findAll();

@@ -8,5 +8,6 @@ public interface IFavoritoService {
     boolean save (Favorito favorito);
     boolean update (Favorito favorito);
     boolean delete (FavoritoPK favorito);
-    Favorito[] findAllByUser(Long idUsuario);
+    Favorito[] findAllByUser(String idUsuario);
+
 }

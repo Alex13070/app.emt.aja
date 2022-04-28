@@ -175,6 +175,7 @@ public class FavoritoController {
             respuesta = new ResponseEntity<FavoritoPK>(HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Error al eliminar favorito");
         }
+        
         return respuesta;
     }
 
@@ -185,7 +186,7 @@ public class FavoritoController {
      *         {@false 400 bad request}
      */
     @GetMapping("/obtener-favoritos")
-    public ResponseEntity<Favorito[]> obtenerFavoritos(@RequestParam Long id) {
+    public ResponseEntity<Favorito[]> obtenerFavoritos(@RequestParam String id) {
 
         ResponseEntity<Favorito[]> respuesta;
 

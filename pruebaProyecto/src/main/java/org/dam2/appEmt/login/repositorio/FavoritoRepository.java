@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface FavoritoRepository extends JpaRepository<Favorito, FavoritoPK>{
 
     @Query("SELECT f FROM Favorito f WHERE f.id.usuario.id = ?1")
-    public Favorito[] obtenerFavoritosPorUsuario (Long id);
+    public Favorito[] obtenerFavoritosPorUsuario (String id);
     
 }
