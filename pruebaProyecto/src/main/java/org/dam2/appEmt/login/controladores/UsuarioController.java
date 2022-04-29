@@ -165,7 +165,6 @@ public class UsuarioController {
         return respuesta;
 
     }
-    
     /*
     @SuppressWarnings("unused")
 	@PostMapping("/login")
