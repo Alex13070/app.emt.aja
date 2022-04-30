@@ -2,12 +2,15 @@ package org.dam2.appEmt.login.modelo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -62,5 +65,12 @@ public class Usuario implements Serializable{
     @Enumerated(value = EnumType.STRING)
     @NotNull
     private Sexo sexo;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Rol> roles;
+
+    public boolean addRol(Rol rol) {
+        return roles.add(rol);
+    }
     
 }

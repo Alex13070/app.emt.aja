@@ -3,23 +3,24 @@ package org.dam2.appEmt.login.servicios;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import org.dam2.appEmt.login.modelo.Key;
-import org.dam2.appEmt.login.repositorio.KeyRepository;
+import org.dam2.appEmt.login.modelo.Token;
+import org.dam2.appEmt.login.repositorio.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class KeyService implements IKeyService {
+public class TokenServiceImpl implements ITokenService {
 
     @Autowired
-    private KeyRepository daoKey;
+    private TokenRepository daoKey;
 
     @Override
     public boolean estaOperativo(String token) {
         boolean operativo = false;
+        Optional<Token> key = daoKey.findById(token);
 
-        if (daoKey.existsById(token)) {
-            LocalDateTime t = daoKey.fechaFin(token);
+        if (key.isPresent()) {
+            LocalDateTime t = key.get().getFechaFin();
             operativo =  t.isBefore(LocalDateTime.now());
         }     
 
@@ -30,16 +31,17 @@ public class KeyService implements IKeyService {
     public LocalDateTime fechaFin(String token) {
         
         LocalDateTime time = LocalDateTime.MIN;
+        Optional<Token> key = daoKey.findById(token);
 
-        if (daoKey.existsById(token)) {
-            time = daoKey.fechaFin(token);
-        }
+        if (key.isPresent()) {
+            time = key.get().getFechaFin();
+        } 
 
         return time;
     }
 
     @Override
-    public Optional<Key> save(Key key) {
+    public Optional<Token> save(Token key) {
 
         return Optional.ofNullable(daoKey.save(key));
     }

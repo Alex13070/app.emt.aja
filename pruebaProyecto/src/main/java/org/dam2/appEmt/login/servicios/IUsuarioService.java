@@ -1,6 +1,7 @@
 package org.dam2.appEmt.login.servicios;
 
 import java.util.Optional;
+
 import org.dam2.appEmt.login.modelo.Usuario;
 
 public interface IUsuarioService {
@@ -10,6 +11,7 @@ public interface IUsuarioService {
     Optional<Usuario> findById(String id);
     Optional<Usuario> findByCorreoAndClave(String correo, String clave);
     boolean existsById(String id);
+    boolean addRol(String correo, String nombreRol);
    
     // Pruebas
     //List<Usuario> findAll();

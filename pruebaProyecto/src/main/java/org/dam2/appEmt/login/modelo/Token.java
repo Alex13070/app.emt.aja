@@ -22,8 +22,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
-@Entity
-public class Key implements Serializable{
+@Entity(name = "tokens")
+public class Token implements Serializable{
 
     @Id
     @EqualsAndHashCode.Include

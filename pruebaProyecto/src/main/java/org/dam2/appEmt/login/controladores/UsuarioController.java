@@ -9,11 +9,14 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.dam2.appEmt.configuration.MD5;
+import org.dam2.appEmt.login.modelPeticion.AddRolRequest;
 import org.dam2.appEmt.login.modelPeticion.LoginRequest;
 import org.dam2.appEmt.login.modelPeticion.LoginResponse;
+import org.dam2.appEmt.login.modelo.Rol;
 // import org.dam2.appEmt.login.modelPeticion.LoginRequest;
 // import org.dam2.appEmt.login.modelPeticion.LoginResponse;
 import org.dam2.appEmt.login.modelo.Usuario;
+import org.dam2.appEmt.login.servicios.IRolService;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +61,10 @@ public class UsuarioController {
 	private final long tiempo = 600000;
     
     @Autowired
-    private IUsuarioService servicioUsuario;
+    private IUsuarioService usuarioService;
+
+    @Autowired
+    private IRolService rolService;
 
     ///Pruebas
     /*
@@ -82,7 +88,7 @@ public class UsuarioController {
 
         try {
             
-            if (servicioUsuario.insert(usuario)) {
+            if (usuarioService.insert(usuario)) {
                 respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
                 logger.info("Usuario insertado");
             }
@@ -114,7 +120,7 @@ public class UsuarioController {
         ResponseEntity<Usuario> respuesta;
 
         try {
-            if (servicioUsuario.update(usuario)) {
+            if (usuarioService.update(usuario)) {
                 logger.info("Usuario actualizado");
                 respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
             }
@@ -139,7 +145,7 @@ public class UsuarioController {
 
         try {
 
-            Optional<Usuario> usuario = servicioUsuario.findByCorreoAndClave(entity.getCorreo(), MD5.encriptar(entity.getClave()));
+            Optional<Usuario> usuario = usuarioService.findByCorreoAndClave(entity.getCorreo(), MD5.encriptar(entity.getClave()));
 
             if (usuario.isPresent()) {
                 
@@ -165,6 +171,40 @@ public class UsuarioController {
         return respuesta;
 
     }
+
+    @PostMapping("/add-rol")
+    public ResponseEntity<Void> addRolUsuario(@RequestBody AddRolRequest entity) {
+
+        ResponseEntity<Void> respuesta;
+
+        try {
+
+            Optional<Usuario> usuario = usuarioService.findByCorreoAndClave(entity.getCorreo(), MD5.encriptar(entity.getCorreo()));
+            Optional<Rol> rol = rolService.findByNombre(entity.getRol());
+            if (usuario.isPresent() && rol.isPresent()) {
+                
+                if (usuarioService.addRol(entity.getCorreo(), entity.getRol())) {
+                    logger.info("Rol added");
+                    respuesta = new ResponseEntity<>(HttpStatus.ACCEPTED);
+                }
+                else {
+                    logger.info("No se puede add el rol");
+                    respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            }
+            else {
+                logger.info("El usuario no existe");
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        catch (Exception e) {
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+            logger.error("Error al add rol al usuario");
+        }
+
+        return respuesta;
+
+    }
     /*
     @SuppressWarnings("unused")
 	@PostMapping("/login")
@@ -173,7 +213,7 @@ public class UsuarioController {
     	
     	String token = ""; 
         //comprobariamos en la base de datos
-        //if(servicioUsuario.findByCorreoAndClave(correo, clave).isPresent())
+        //if(usuarioService.findByCorreoAndClave(correo, clave).isPresent())
         //correo.equals("client") && clave.equals("client")
     	if (request.getCorreo().equals("client") && request.getClave().equals("client"))
             token = getJWTToken(request.getCorreo());
