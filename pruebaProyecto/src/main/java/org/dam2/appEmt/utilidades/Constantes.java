@@ -29,4 +29,11 @@ public class Constantes {
 	public static final String URL_LISTA_PARADAS = "https://openapi.emtmadrid.es/v1/transport/busemtmad/stops/list/";
 
 
+	/**
+	 * Correo del administrador
+	 */
+	public final static String CORREO_ADMIN = "app.emt.aja@gmail.com";
+
+	public final static String PASSWORD_ADMIN = "Xacvrwe112?__";
+
 }

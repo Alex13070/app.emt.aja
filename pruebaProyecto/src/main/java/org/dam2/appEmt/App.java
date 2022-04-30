@@ -1,6 +1,15 @@
 package org.dam2.appEmt;
 
+import java.time.LocalDate;
+import java.util.HashSet;
+
+import org.dam2.appEmt.configuration.MD5;
+import org.dam2.appEmt.login.modelo.NombreRol;
+import org.dam2.appEmt.login.modelo.Sexo;
+import org.dam2.appEmt.login.modelo.Usuario;
+import org.dam2.appEmt.login.servicios.IRolService;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
+import org.dam2.appEmt.utilidades.Constantes;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,9 +27,28 @@ public class App {
 	}
 	
 	@Bean
-	CommandLineRunner run (IUsuarioService usuarioService) {
+	CommandLineRunner run (IUsuarioService usuarioService, IRolService rolService) {
 		return args -> {
-			//Usuario administrador y roles.
+
+			rolService.saveRol(NombreRol.ROLE_ADMIN);
+			rolService.saveRol(NombreRol.ROLE_USER);
+
+
+			usuarioService.insert(
+				Usuario.builder()
+					.correo(Constantes.CORREO_ADMIN)
+					.clave(MD5.encriptar(Constantes.PASSWORD_ADMIN))
+					.nombre("Admin")
+					.apellidos("Admin")
+					.fechaNacimiento(LocalDate.of(2000, 1, 1))
+					.sexo(Sexo.NO_ESPECIFICADO)
+					.roles(new HashSet<>())
+					.build()
+			);
+
+			usuarioService.addRol(Constantes.CORREO_ADMIN, NombreRol.ROLE_ADMIN);
+			usuarioService.addRol(Constantes.CORREO_ADMIN, NombreRol.ROLE_USER);
+
 		};
 	}
 }

@@ -2,8 +2,6 @@ package org.dam2.appEmt.login.servicios;
 
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.dam2.appEmt.login.modelo.Rol;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.login.repositorio.RolRepository;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
  * UsuarioService
  */
 @Service
-@Transactional
 public class UsuarioServiceImpl implements IUsuarioService {
 
     @Autowired
