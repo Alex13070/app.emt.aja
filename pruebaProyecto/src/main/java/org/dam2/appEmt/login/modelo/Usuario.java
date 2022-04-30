@@ -43,9 +43,9 @@ public class Usuario implements Serializable{
 	private String correo;
 
     //Entre 8 y 12 caracteres, una mayuscula, una minuscula, un numero y un caracter especial
-    @Length(min = 8, max = 12, message = "La clave debe tener entre 8 y 12 caracteres")
+    //@Length(min = 8, max = 20, message = "La clave debe tener entre 8 y 20 caracteres")
+    //@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,12}$", message = "La clave no coincide con los requisitos")
     @NotBlank
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,12}$", message = "La clave no coincide con los requisitos")
     private String clave;
 
 

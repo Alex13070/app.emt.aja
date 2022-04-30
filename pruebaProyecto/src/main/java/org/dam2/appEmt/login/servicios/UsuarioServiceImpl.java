@@ -2,6 +2,8 @@ package org.dam2.appEmt.login.servicios;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.dam2.appEmt.login.modelo.Rol;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.login.repositorio.RolRepository;

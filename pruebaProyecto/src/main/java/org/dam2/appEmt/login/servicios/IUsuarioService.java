@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.dam2.appEmt.login.modelo.Usuario;
 
+
 public interface IUsuarioService {
     
     boolean insert(Usuario usuario);

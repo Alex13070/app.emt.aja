@@ -89,7 +89,7 @@ public class UsuarioController {
         try {
             
             if (usuarioService.insert(usuario)) {
-                respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
+                respuesta = new ResponseEntity<>(usuario, HttpStatus.CREATED);
                 logger.info("Usuario insertado");
             }
             else {
@@ -145,7 +145,7 @@ public class UsuarioController {
 
         try {
 
-            Optional<Usuario> usuario = usuarioService.findByCorreoAndClave(entity.getCorreo(), MD5.encriptar(entity.getClave()));
+            Optional<Usuario> usuario = usuarioService.findByCorreoAndClave(entity.getCorreo(), entity.getClave());
 
             if (usuario.isPresent()) {
                 
@@ -187,7 +187,7 @@ public class UsuarioController {
                     logger.info("Rol added");
                     respuesta = new ResponseEntity<>(HttpStatus.ACCEPTED);
                 }
-                else {
+                else { 
                     logger.info("No se puede add el rol");
                     respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }

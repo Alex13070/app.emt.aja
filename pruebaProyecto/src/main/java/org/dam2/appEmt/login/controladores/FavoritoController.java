@@ -75,7 +75,7 @@ public class FavoritoController {
 
 
             if (favoritoService.save(favorito)){
-                respuesta = new ResponseEntity<Favorito>(favorito, HttpStatus.ACCEPTED);
+                respuesta = new ResponseEntity<Favorito>(favorito, HttpStatus.CREATED);
                 logger.info("Favorito insertado");
             }
             else {

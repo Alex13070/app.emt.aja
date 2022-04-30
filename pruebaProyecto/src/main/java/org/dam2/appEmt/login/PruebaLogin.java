@@ -1,9 +1,11 @@
 package org.dam2.appEmt.login;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import org.dam2.appEmt.login.modelo.Sexo;
 import org.dam2.appEmt.login.modelo.Usuario;
+import org.dam2.appEmt.utilidades.Constantes;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +18,23 @@ public class PruebaLogin {
 
     public static void main(String[] args) {
 
+        /*
+        Gson gson = new Gson();
+
+
+        
+        System.out.println(gson.toJson(u));
+        */
         Usuario usuario = Usuario.builder()
-            .correo("correo@correo.com")
-            .clave("Usisis12!f")
-            .nombre("pepe")
-            .apellidos("Pepepe")
-            .fechaNacimiento(LocalDate.of(2002, 12, 12))
-            .sexo(Sexo.HOMBRE)
-            .build();
-
-
+					.correo(Constantes.CORREO_ADMIN)
+					.clave(Constantes.PASSWORD_ADMIN)
+					.nombre("Admin")
+					.apellidos("Admin")
+					.fechaNacimiento(LocalDate.of(2000, 1, 1))
+					.sexo(Sexo.NO_ESPECIFICADO)
+					.roles(new HashSet<>())
+					.build();
+        
         try {
 
             RestTemplate restTemplate = new RestTemplate ();

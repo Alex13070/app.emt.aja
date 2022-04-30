@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @SpringBootApplication
 //@Import({ SecurityConfig.class })
@@ -25,30 +26,30 @@ public class App {
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
 	}
-	
+
 	@Bean
 	CommandLineRunner run (IUsuarioService usuarioService, IRolService rolService) {
 		return args -> {
 
-			rolService.saveRol(NombreRol.ROLE_ADMIN);
-			rolService.saveRol(NombreRol.ROLE_USER);
-
-
 			usuarioService.insert(
 				Usuario.builder()
-					.correo(Constantes.CORREO_ADMIN)
-					.clave(MD5.encriptar(Constantes.PASSWORD_ADMIN))
-					.nombre("Admin")
+				.correo(Constantes.CORREO_ADMIN)
+				.clave(MD5.encriptar(Constantes.PASSWORD_ADMIN))
+				.nombre("Admin")
 					.apellidos("Admin")
 					.fechaNacimiento(LocalDate.of(2000, 1, 1))
 					.sexo(Sexo.NO_ESPECIFICADO)
 					.roles(new HashSet<>())
 					.build()
-			);
+					);
+
+			rolService.saveRol(NombreRol.ROLE_USER);
+			rolService.saveRol(NombreRol.ROLE_ADMIN);
 
 			usuarioService.addRol(Constantes.CORREO_ADMIN, NombreRol.ROLE_ADMIN);
 			usuarioService.addRol(Constantes.CORREO_ADMIN, NombreRol.ROLE_USER);
 
 		};
 	}
+	
 }

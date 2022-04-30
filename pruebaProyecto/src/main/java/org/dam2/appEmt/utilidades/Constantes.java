@@ -34,6 +34,6 @@ public class Constantes {
 	 */
 	public final static String CORREO_ADMIN = "app.emt.aja@gmail.com";
 
-	public final static String PASSWORD_ADMIN = "Xacvrwe112?__";
+	public final static String PASSWORD_ADMIN = "Xacvrwe112?";
 
 }
