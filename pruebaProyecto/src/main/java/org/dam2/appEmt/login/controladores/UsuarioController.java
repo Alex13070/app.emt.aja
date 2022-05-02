@@ -103,7 +103,6 @@ public class UsuarioController {
             logger.error("Error al insertar usuario");
         }
 
-
         return respuesta;
     }
 
