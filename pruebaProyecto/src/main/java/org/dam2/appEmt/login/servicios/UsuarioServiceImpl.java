@@ -1,21 +1,27 @@
 package org.dam2.appEmt.login.servicios;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
 
 import org.dam2.appEmt.login.modelo.Rol;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.login.repositorio.RolRepository;
 import org.dam2.appEmt.login.repositorio.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 /**
  * UsuarioService
  */
 @Service
-public class UsuarioServiceImpl implements IUsuarioService {
+public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
 
     @Autowired
     private UsuarioRepository daoUsuario;
@@ -23,11 +29,15 @@ public class UsuarioServiceImpl implements IUsuarioService {
     @Autowired
     private RolRepository daoRol;
 
+    @Autowired 
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public boolean insert(Usuario usuario) {
         boolean exito = false;
 
         if (!daoUsuario.existsById(usuario.getCorreo())) {
+            usuario.setClave(passwordEncoder.encode(usuario.getClave()));
             daoUsuario.save(usuario);
             exito = true;
         }
@@ -75,9 +85,28 @@ public class UsuarioServiceImpl implements IUsuarioService {
             Usuario u = usuario.get();
             u.addRol(rol.get());
             daoUsuario.save(u);
+            respuesta = true; 
         }
         return respuesta;
         
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
+        Optional<Usuario> usuario = daoUsuario.findByCorreo(correo);
+
+        if (usuario.isEmpty()){
+            throw new UsernameNotFoundException("Usuario no encontrado en la base de datos");
+        }
+
+        Usuario u = usuario.get();
+
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        u.getRoles().forEach(rol -> {
+            authorities.add(new SimpleGrantedAuthority(rol.getNombre()));
+        });
+
+        return new User(u.getCorreo(), u.getClave(), authorities);
     }
 
     /*

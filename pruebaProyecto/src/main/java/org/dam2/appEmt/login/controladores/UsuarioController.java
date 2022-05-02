@@ -137,7 +137,7 @@ public class UsuarioController {
         return respuesta;
 
     }
-
+    /*
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUsuario(@RequestBody LoginRequest entity) {
 
@@ -171,7 +171,7 @@ public class UsuarioController {
         return respuesta;
 
     }
-
+    */
     @PostMapping("/add-rol")
     public ResponseEntity<Void> addRolUsuario(@RequestBody AddRolRequest entity) {
 
@@ -179,7 +179,7 @@ public class UsuarioController {
 
         try {
 
-            Optional<Usuario> usuario = usuarioService.findByCorreoAndClave(entity.getCorreo(), MD5.encriptar(entity.getCorreo()));
+            Optional<Usuario> usuario = usuarioService.findById(entity.getCorreo());
             Optional<Rol> rol = rolService.findByNombre(entity.getRol());
             if (usuario.isPresent() && rol.isPresent()) {
                 

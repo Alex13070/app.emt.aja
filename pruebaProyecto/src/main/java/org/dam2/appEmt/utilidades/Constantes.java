@@ -34,6 +34,23 @@ public class Constantes {
 	 */
 	public final static String CORREO_ADMIN = "app.emt.aja@gmail.com";
 
+	/**
+	 * Password del administrador
+	 */
 	public final static String PASSWORD_ADMIN = "Xacvrwe112?";
+
+	/**
+	 * Secret key de cifrado JWT
+	 */
+	public final static String SECRET_KEY = "befjvncwo_nveutbn:oymth,potb,gvf";
+
+	/**
+	 * Tiempo de expiracion en milisegundos
+	 */
+	public final static Long TIEMPO_EXPIRACION = 
+		1L  * /* Horas */
+		60L * /* Minutos */
+		60L * /* Segundos */
+		1000L /* Milisegundos */;
 
 }
