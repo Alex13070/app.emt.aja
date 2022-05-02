@@ -8,10 +8,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.dam2.appEmt.configuration.MD5;
 import org.dam2.appEmt.login.modelPeticion.AddRolRequest;
-import org.dam2.appEmt.login.modelPeticion.LoginRequest;
-import org.dam2.appEmt.login.modelPeticion.LoginResponse;
 import org.dam2.appEmt.login.modelo.Rol;
 // import org.dam2.appEmt.login.modelPeticion.LoginRequest;
 // import org.dam2.appEmt.login.modelPeticion.LoginResponse;
