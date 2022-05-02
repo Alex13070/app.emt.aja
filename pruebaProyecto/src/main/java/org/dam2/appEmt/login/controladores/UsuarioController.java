@@ -79,7 +79,7 @@ public class UsuarioController {
      *         {@false 400 bad request}
      */
     @PostMapping("/insertar")
-    public ResponseEntity<Usuario> insertarUsuario(@RequestBody @Valid Usuario usuario) {
+    public ResponseEntity<Usuario> insertarUsuario(@RequestBody /*@Valid*/ Usuario usuario) {
 
         ResponseEntity<Usuario> respuesta;
 

@@ -3,6 +3,7 @@ package org.dam2.appEmt;
 import java.time.LocalDate;
 import java.util.HashSet;
 
+import org.dam2.appEmt.configuration.MD5;
 import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.Sexo;
 import org.dam2.appEmt.login.modelo.Usuario;
@@ -36,7 +37,7 @@ public class App {
 			usuarioService.insert(
 				Usuario.builder()
 				.correo(Constantes.CORREO_ADMIN)
-				.clave(Constantes.PASSWORD_ADMIN)
+				.clave(MD5.encriptar( Constantes.PASSWORD_ADMIN))
 				.nombre("Admin")
 					.apellidos("Admin")
 					.fechaNacimiento(LocalDate.of(2000, 1, 1))
