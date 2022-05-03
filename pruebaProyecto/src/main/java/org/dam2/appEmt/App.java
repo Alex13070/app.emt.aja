@@ -3,8 +3,6 @@ package org.dam2.appEmt;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-import com.auth0.jwt.algorithms.Algorithm;
-
 import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.Sexo;
 import org.dam2.appEmt.login.modelo.Usuario;
@@ -29,13 +27,13 @@ public class App {
 		return new BCryptPasswordEncoder();
 	}
 
-
+	/*
 	//Posible bum en CustomAuthenticationFilter y CustomAuthorizationFilter
 	@Bean
 	Algorithm algorithm() {
 		return Algorithm.HMAC256(Constantes.SECRET_KEY.getBytes());
 	}
-
+	*/
 	@Bean
 	CommandLineRunner run (IUsuarioService usuarioService, IRolService rolService) {
 		return args -> {
@@ -52,7 +50,7 @@ public class App {
 					.build()
 			);
 
-			rolService.saveRol(NombreRol.ROLE_USER);
+			rolService.saveRol(NombreRol.ROLE_USER); 
 			rolService.saveRol(NombreRol.ROLE_ADMIN);
 
 			usuarioService.addRol(Constantes.CORREO_ADMIN, NombreRol.ROLE_ADMIN);
