@@ -44,9 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         //Permisos de acceso a controladores de usuario
         http.authorizeRequests().antMatchers("/usuario/login").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/insertar").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/insertar").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/usuario/actualizar").authenticated();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/add-rol").hasRole(NombreRol.ROLE_ADMIN);
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/add-rol").hasAuthority(NombreRol.ROLE_ADMIN);
         
         
         //Permisos de acceso a controladores de favoritos
@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/favorito/obtener-favoritos").authenticated();
 
         //Permisos de acceso a controladores de MongoDB
-        http.authorizeRequests().antMatchers("/mongo/**").hasRole(NombreRol.ROLE_ADMIN);
+        http.authorizeRequests().antMatchers("/mongo/**").hasAuthority(NombreRol.ROLE_ADMIN);
 
         //Permisos de acceso a controladores de la emt
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/consultar-parada/{parada}").authenticated();
