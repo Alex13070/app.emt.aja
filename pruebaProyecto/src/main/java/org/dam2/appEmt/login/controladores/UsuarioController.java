@@ -2,6 +2,8 @@ package org.dam2.appEmt.login.controladores;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 // import java.util.Date;
 // import java.util.List;
 // import java.util.stream.Collectors;
@@ -9,6 +11,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.dam2.appEmt.login.modelPeticion.AddRolRequest;
+import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.Rol;
 // import org.dam2.appEmt.login.modelPeticion.LoginRequest;
 // import org.dam2.appEmt.login.modelPeticion.LoginResponse;
@@ -78,6 +81,7 @@ public class UsuarioController {
      * @return {@true 202 accepted y usuario insertado}
      *         {@false 400 bad request}
      */
+    @Transactional
     @PostMapping("/insertar")
     public ResponseEntity<Usuario> insertarUsuario(@RequestBody @Valid Usuario usuario) {
 
@@ -86,6 +90,7 @@ public class UsuarioController {
         try {
             
             if (usuarioService.insert(usuario)) {
+                usuarioService.addRol(usuario.getCorreo(), NombreRol.ROLE_USER);
                 respuesta = new ResponseEntity<>(usuario, HttpStatus.CREATED);
                 logger.info("Usuario insertado");
             }
