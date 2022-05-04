@@ -85,9 +85,9 @@ public class UsuarioController {
      */
     @Transactional
     @PostMapping("/insertar")
-    public ResponseEntity<Usuario> insertarUsuario(@RequestBody /*@Valid*/ UsuarioRequest request) {
+    public ResponseEntity<UsuarioRequest> insertarUsuario(@RequestBody /*@Valid*/ UsuarioRequest request) {
 
-        ResponseEntity<Usuario> respuesta;
+        ResponseEntity<UsuarioRequest> respuesta;
 
         try {
 
@@ -104,7 +104,7 @@ public class UsuarioController {
             
             if (usuarioService.insert(usuario)) {
                 usuarioService.addRol(usuario.getCorreo(), NombreRol.ROLE_USER);
-                respuesta = new ResponseEntity<>(usuario, HttpStatus.CREATED);
+                respuesta = new ResponseEntity<>(request, HttpStatus.CREATED);
                 logger.info("Usuario insertado");
             }
             else {
@@ -129,9 +129,9 @@ public class UsuarioController {
      *         {@false 400 bad request}
      */
     @PutMapping("/actualizar")
-    public ResponseEntity<Usuario> actualizarUsuario(@RequestBody @Valid Usuario request) {
+    public ResponseEntity<UsuarioRequest> actualizarUsuario(@RequestBody @Valid UsuarioRequest request) {
 
-        ResponseEntity<Usuario> respuesta;
+        ResponseEntity<UsuarioRequest> respuesta;
 
         try {
 
@@ -147,7 +147,7 @@ public class UsuarioController {
 
             if (usuarioService.update(usuario)) {
                 logger.info("Usuario actualizado");
-                respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
+                respuesta = new ResponseEntity<>(request, HttpStatus.ACCEPTED);
             }
             else {
                 logger.info("El usuario no existe");
