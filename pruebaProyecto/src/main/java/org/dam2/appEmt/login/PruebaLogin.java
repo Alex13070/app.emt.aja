@@ -3,19 +3,21 @@ package org.dam2.appEmt.login;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-import org.dam2.appEmt.configuration.MD5;
 import org.dam2.appEmt.login.modelo.Sexo;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.utilidades.Constantes;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
 public class PruebaLogin {
     
     private final static String INSERTAR = "http://localhost:8081/usuario/insertar";
     private final static String ACTUALIZAR = "http://localhost:8081/usuario/actualizar";
+
+    private static BCryptPasswordEncoder encriptar = new BCryptPasswordEncoder();
 
     public static void main(String[] args) {
 
@@ -26,9 +28,10 @@ public class PruebaLogin {
         
         System.out.println(gson.toJson(u));
         */
+        
         Usuario usuario = Usuario.builder()
 					.correo(Constantes.CORREO_ADMIN)
-					.clave(MD5.encriptar(Constantes.PASSWORD_ADMIN))
+					.clave(encriptar.encode(Constantes.PASSWORD_ADMIN))
 					.nombre("Admin")
 					.apellidos("Admin")
 					.fechaNacimiento(LocalDate.of(2000, 1, 1))
