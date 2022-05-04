@@ -1,5 +1,6 @@
 package org.dam2.appEmt.login.controladores;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -11,6 +12,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.dam2.appEmt.login.modelPeticion.AddRolRequest;
+import org.dam2.appEmt.login.modelPeticion.UsuarioRequest;
 import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.Rol;
 // import org.dam2.appEmt.login.modelPeticion.LoginRequest;
@@ -83,11 +85,22 @@ public class UsuarioController {
      */
     @Transactional
     @PostMapping("/insertar")
-    public ResponseEntity<Usuario> insertarUsuario(@RequestBody /*@Valid*/ Usuario usuario) {
+    public ResponseEntity<Usuario> insertarUsuario(@RequestBody /*@Valid*/ UsuarioRequest request) {
 
         ResponseEntity<Usuario> respuesta;
 
         try {
+
+            Usuario usuario = Usuario.builder()
+                .correo(request.getCorreo())
+                .clave(request.getClave())
+                .nombre(request.getNombre())
+                .apellidos(request.getApellidos())
+                .fechaNacimiento(request.getFechaNacimiento())
+                .sexo(request.getSexo())
+                .roles(new HashSet<>())
+                .build();
+
             
             if (usuarioService.insert(usuario)) {
                 usuarioService.addRol(usuario.getCorreo(), NombreRol.ROLE_USER);
@@ -116,11 +129,22 @@ public class UsuarioController {
      *         {@false 400 bad request}
      */
     @PutMapping("/actualizar")
-    public ResponseEntity<Usuario> actualizarUsuario(@RequestBody @Valid Usuario usuario) {
+    public ResponseEntity<Usuario> actualizarUsuario(@RequestBody @Valid Usuario request) {
 
         ResponseEntity<Usuario> respuesta;
 
         try {
+
+            Usuario usuario = Usuario.builder()
+                .correo(request.getCorreo())
+                .clave(request.getClave())
+                .nombre(request.getNombre())
+                .apellidos(request.getApellidos())
+                .fechaNacimiento(request.getFechaNacimiento())
+                .sexo(request.getSexo())
+                .roles(new HashSet<>())
+                .build();
+
             if (usuarioService.update(usuario)) {
                 logger.info("Usuario actualizado");
                 respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
