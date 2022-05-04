@@ -3,7 +3,6 @@ package org.dam2.appEmt.login;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.dam2.appEmt.configuration.MD5;
 import org.dam2.appEmt.login.modelo.Sexo;
 import org.dam2.appEmt.login.modelo.Usuario;

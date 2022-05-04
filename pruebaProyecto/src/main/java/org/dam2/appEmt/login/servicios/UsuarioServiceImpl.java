@@ -13,7 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -29,15 +28,15 @@ public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
     @Autowired
     private RolRepository daoRol;
 
-   /* @Autowired 
-    private BCryptPasswordEncoder passwordEncoder;
-*/
+    // @Autowired 
+    // private BCryptPasswordEncoder passwordEncoder;
+    
     @Override
     public boolean insert(Usuario usuario) {
         boolean exito = false;
 
         if (!daoUsuario.existsById(usuario.getCorreo())) {
-          //  usuario.setClave(passwordEncoder.encode(usuario.getClave()));
+            // usuario.setClave(passwordEncoder.encode(usuario.getClave()));
             daoUsuario.save(usuario);
             exito = true;
         }

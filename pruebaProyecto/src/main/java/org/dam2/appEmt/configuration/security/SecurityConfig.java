@@ -32,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
-    //TODO: Arreglar el acceso a un solo rol.
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //Este objeto permite personalizar el filtro de autenticacion
@@ -44,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         //Permisos de acceso a controladores de usuario
         http.authorizeRequests().antMatchers("/usuario/login").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/insertar").authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/insertar").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/usuario/actualizar").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/add-rol").hasAuthority(NombreRol.ROLE_ADMIN);
         

@@ -55,12 +55,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
                     Collection<SimpleGrantedAuthority> authorities = roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
                     
-                    authorities.forEach(System.out::println);
+                    //authorities.forEach(System.out::println);
 
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
                     
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    System.out.println("\n\n\nEntro al 1 \n\n\n");
+                    // System.out.println("\n\n\nEntro al 1 \n\n\n");
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
 
