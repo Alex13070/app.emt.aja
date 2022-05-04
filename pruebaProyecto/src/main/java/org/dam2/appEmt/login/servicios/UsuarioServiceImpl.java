@@ -29,15 +29,15 @@ public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
     @Autowired
     private RolRepository daoRol;
 
-    @Autowired 
+   /* @Autowired 
     private BCryptPasswordEncoder passwordEncoder;
-
+*/
     @Override
     public boolean insert(Usuario usuario) {
         boolean exito = false;
 
         if (!daoUsuario.existsById(usuario.getCorreo())) {
-            usuario.setClave(passwordEncoder.encode(usuario.getClave()));
+          //  usuario.setClave(passwordEncoder.encode(usuario.getClave()));
             daoUsuario.save(usuario);
             exito = true;
         }

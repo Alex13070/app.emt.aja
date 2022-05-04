@@ -83,7 +83,7 @@ public class UsuarioController {
      */
     @Transactional
     @PostMapping("/insertar")
-    public ResponseEntity<Usuario> insertarUsuario(@RequestBody @Valid Usuario usuario) {
+    public ResponseEntity<Usuario> insertarUsuario(@RequestBody /*@Valid*/ Usuario usuario) {
 
         ResponseEntity<Usuario> respuesta;
 

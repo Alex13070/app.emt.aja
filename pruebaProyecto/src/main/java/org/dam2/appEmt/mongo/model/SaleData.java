@@ -2,6 +2,8 @@ package org.dam2.appEmt.mongo.model;
 
 import java.io.Serializable;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 import org.dam2.appEmt.modeloTimeArrival.Point;
 import org.springframework.data.annotation.Id;
@@ -22,7 +24,8 @@ import lombok.NoArgsConstructor;
 public class SaleData implements Serializable {
 
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
     private String fecha;
     private Integer edad;
     private String sexo;
