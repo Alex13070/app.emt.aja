@@ -264,9 +264,12 @@ public class UsuarioController {
         if(usuario.isPresent()){ //mira que haya encontrado alguno
 
             String contrasenia = usuario.get().getClave(); //si lo tiene busca su clave
+
             System.err.println("--------------"+contrasenia+"------------------");
             System.err.println("--------------"+request.getClave()+"------------------");
 
+            //contrasenia vendría encriptada
+            //la contrasenia que coge con getClave debería haberse insertado en base de datos con la misma encriptacion
             if (request.getClave().equals(contrasenia)){ //compara con la que se le ha pasado
                 //generar token
                 token = JWT.create()
@@ -277,9 +280,11 @@ public class UsuarioController {
                 //        usuario.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 //                .collect(Collectors.toList()))
                 .sign(algorithm);
+			    resp = new ResponseEntity<LoginResponse>(new LoginResponse(token), HttpStatus.OK);
+            }else{
+                resp = new ResponseEntity<LoginResponse>(HttpStatus.BAD_REQUEST);
             }
         
-			resp = new ResponseEntity<LoginResponse>(new LoginResponse(token), HttpStatus.OK);
         }else{
             resp = new ResponseEntity<LoginResponse>(HttpStatus.BAD_REQUEST);
         }
