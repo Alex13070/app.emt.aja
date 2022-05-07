@@ -26,8 +26,10 @@ import org.dam2.appEmt.login.modelo.Rol;
 // import org.dam2.appEmt.login.modelPeticion.LoginRequest;
 // import org.dam2.appEmt.login.modelPeticion.LoginResponse;
 import org.dam2.appEmt.login.modelo.Usuario;
+import org.dam2.appEmt.login.repositorio.UsuarioRepository;
 import org.dam2.appEmt.login.servicios.IRolService;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
+import org.dam2.appEmt.login.servicios.UsuarioServiceImpl;
 import org.dam2.appEmt.utilidades.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,13 +83,12 @@ public class UsuarioController {
     private IRolService rolService;
 
     ///Pruebas
-    /*
-    @Autowired
-    private FavoritoRepository daoFavorito;
+    //@Autowired
+    //private FavoritoRepository daoFavorito;
 
-    @Autowired 
-    private UsuarioRepository daoUsuario;
-    */
+    //@Autowired 
+    //private UsuarioRepository daoUsuario;
+    
 
     /**
      * Controlador para insertar usuarios a la base de datos
@@ -254,22 +255,35 @@ public class UsuarioController {
         String token = ""; 
         //comprobariamos en la base de datos
         String correo = request.getCorreo();
-        String contrasenia = ""; //buscar en base de datos
-                
-    	if (request.getClave().equals(contrasenia)){
-            //generar token
-            token = JWT.create()
-            .withSubject(correo)
-            .withExpiresAt(new Date(System.currentTimeMillis() + Constantes.TIEMPO_EXPIRACION))
-            //.withIssuer(request.getRequestURL().toString())
-            //.withClaim("roles",
-            //        usuario.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-            //                .collect(Collectors.toList()))
-            .sign(algorithm);
+        
+        //buscar en base de datos
+        UsuarioServiceImpl u = new UsuarioServiceImpl();
+        Optional<Usuario> usuario = u.findById(correo);
+
+        ResponseEntity<LoginResponse> resp = new ResponseEntity<LoginResponse>(null);
+        
+        if(usuario.isPresent()){ //mira que haya encontrado alguno
+
+            String contrasenia = usuario.get().getClave(); //si lo tiene busca su clave
+       
+            if (request.getClave().equals(contrasenia)){ //compara con la que se le ha pasado
+                //generar token
+                token = JWT.create()
+                .withSubject(correo)
+                .withExpiresAt(new Date(System.currentTimeMillis() + Constantes.TIEMPO_EXPIRACION))
+                //.withIssuer(request.getRequestURL().toString())
+                //.withClaim("roles",
+                //        usuario.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                //                .collect(Collectors.toList()))
+                .sign(algorithm);
+            }
+        
+			resp = new ResponseEntity<LoginResponse>(new LoginResponse(token), HttpStatus.OK);
+        }else{
+            resp = new ResponseEntity<LoginResponse>(HttpStatus.BAD_REQUEST);
         }
-			
-		return new ResponseEntity<LoginResponse>(new LoginResponse(token), HttpStatus.OK);
-		
+        
+        return resp;
 	}
     
     /*
