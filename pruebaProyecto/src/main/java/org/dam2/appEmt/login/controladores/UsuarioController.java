@@ -257,15 +257,16 @@ public class UsuarioController {
         String correo = request.getCorreo();
         
         //buscar en base de datos
-        UsuarioServiceImpl u = new UsuarioServiceImpl();
-        Optional<Usuario> usuario = u.findById(correo);
+        Optional<Usuario> usuario = usuarioService.findById(correo);
 
-        ResponseEntity<LoginResponse> resp = new ResponseEntity<LoginResponse>(null);
+        ResponseEntity<LoginResponse> resp = new ResponseEntity<LoginResponse>(HttpStatus.BAD_REQUEST);
         
         if(usuario.isPresent()){ //mira que haya encontrado alguno
 
             String contrasenia = usuario.get().getClave(); //si lo tiene busca su clave
-       
+            System.err.println("--------------"+contrasenia+"------------------");
+            System.err.println("--------------"+request.getClave()+"------------------");
+
             if (request.getClave().equals(contrasenia)){ //compara con la que se le ha pasado
                 //generar token
                 token = JWT.create()
