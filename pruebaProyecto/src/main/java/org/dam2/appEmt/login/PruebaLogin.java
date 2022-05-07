@@ -14,8 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 public class PruebaLogin {
     
-    private final static String INSERTAR = "http://localhost:8081/usuario/insertar";
-    private final static String ACTUALIZAR = "http://localhost:8081/usuario/actualizar";
+    private final static String INSERTAR = "http://localhost:8080/usuario/insertar";
+    private final static String ACTUALIZAR = "http://localhost:8080/usuario/actualizar";
 
     private static BCryptPasswordEncoder encriptar = new BCryptPasswordEncoder();
 
@@ -31,7 +31,7 @@ public class PruebaLogin {
         
         Usuario usuario = Usuario.builder()
 					.correo(Constantes.CORREO_ADMIN)
-					.clave(encriptar.encode(Constantes.PASSWORD_ADMIN))
+					.clave(Constantes.PASSWORD_ADMIN)
 					.nombre("Admin")
 					.apellidos("Admin")
 					.fechaNacimiento(LocalDate.of(2000, 1, 1))

@@ -58,7 +58,8 @@ public class Usuario implements Serializable{
     private String apellidos;
 
     //@Validated(value = ValidarFecha.class)
-    @Past(message = "La fecha tiene que ser anterior a la actual")
+    //QUITADO TEMPORALMENTE
+    //@Past(message = "La fecha tiene que ser anterior a la actual")
     @NotNull
     private LocalDate fechaNacimiento;
     

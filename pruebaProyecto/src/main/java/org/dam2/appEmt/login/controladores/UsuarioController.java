@@ -1,7 +1,10 @@
 package org.dam2.appEmt.login.controladores;
 
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -11,7 +14,12 @@ import javax.transaction.Transactional;
 
 import javax.validation.Valid;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+
 import org.dam2.appEmt.login.modelPeticion.AddRolRequest;
+import org.dam2.appEmt.login.modelPeticion.LoginRequest;
+import org.dam2.appEmt.login.modelPeticion.LoginResponse;
 import org.dam2.appEmt.login.modelPeticion.UsuarioRequest;
 import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.Rol;
@@ -20,11 +28,15 @@ import org.dam2.appEmt.login.modelo.Rol;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.login.servicios.IRolService;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
+import org.dam2.appEmt.utilidades.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 // import org.springframework.security.core.GrantedAuthority;
 // import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -230,24 +242,35 @@ public class UsuarioController {
         return respuesta;
 
     }
-    /*
+
+    
     @SuppressWarnings("unused")
 	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+	public ResponseEntity<LoginResponse> login(/*@RequestBody*/ LoginRequest request) {
 		//@RequestParam("correo") String correo, @RequestParam("clave") String clave
+        
+        Algorithm algorithm = Algorithm.HMAC256(Constantes.SECRET_KEY.getBytes());
     	
-    	String token = ""; 
+        String token = ""; 
         //comprobariamos en la base de datos
-        //if(usuarioService.findByCorreoAndClave(correo, clave).isPresent())
-        //correo.equals("client") && clave.equals("client")
-    	if (request.getCorreo().equals("client") && request.getClave().equals("client"))
-            token = getJWTToken(request.getCorreo());
+        String correo = request.getCorreo();
+        String contrasenia = ""; //buscar en base de datos
+                
+    	if (request.getClave().equals(contrasenia)){
+            //generar token
+            token = JWT.create()
+            .withSubject(correo)
+            .withExpiresAt(new Date(System.currentTimeMillis() + Constantes.TIEMPO_EXPIRACION))
+            //.withIssuer(request.getRequestURL().toString())
+            //.withClaim("roles",
+            //        usuario.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+            //                .collect(Collectors.toList()))
+            .sign(algorithm);
+        }
 			
 		return new ResponseEntity<LoginResponse>(new LoginResponse(token), HttpStatus.OK);
 		
 	}
-
-    */
     
     /*
 	private String getJWTToken(String username) {
@@ -271,7 +294,6 @@ public class UsuarioController {
 
 		return "Bearer " + token;
 	}
-
     */
 
     /*

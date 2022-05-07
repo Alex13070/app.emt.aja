@@ -35,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //Este objeto permite personalizar el filtro de autenticacion
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-        customAuthenticationFilter.setFilterProcessesUrl("/usuario/login");        
+        //CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+        //customAuthenticationFilter.setFilterProcessesUrl("/usuario/login");        
 
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -59,8 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         //Permisos de acceso a controladores de la emt
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/consultar-parada/{parada}").authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/listar-paradas").authenticated();
 
-        http.addFilter(customAuthenticationFilter);
+        //http.addFilter(customAuthenticationFilter);
 
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
