@@ -25,62 +25,80 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import lombok.extern.slf4j.Slf4j;
+// import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+/**
+ * Filtro de autentificacion del app
+ */
+//@Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final AuthenticationManager authenticationManager;
+	private final AuthenticationManager authenticationManager;
 
-    public CustomAuthenticationFilter(AuthenticationManager auth) {
-        this.authenticationManager = auth;
-    }
+	/**
+	 * Constructor de la clase. Generado es generado internanmente por Springboot.
+	 * @param auth Encargado de procesar la autentificacion
+	 */
+	public CustomAuthenticationFilter(AuthenticationManager auth) {
+		this.authenticationManager = auth;
+	}
 
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException {
+	/**
+	 *	Encargada de hacer la autentificacion mediante los parametros pasados como headers. Se encarga de buscar en la base de 
+	 *  datos para hacer la autentificacion mediante un servicio implementado.
+	 */
+	@Override
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+			throws AuthenticationException {
 
-        String username = request.getParameter("correo");
-        String password = request.getParameter("password");
+		//Parametros de headers
+		String username = request.getParameter("correo");
+		String password = request.getParameter("password");
 
-        log.info("Correo: " + (username == null ? "no va" : username));
-        log.info("Clave: " + (password == null ? "no va" : password));
+		// log.info("Correo: " + (username == null ? "no va" : username));
+		// log.info("Clave: " + (password == null ? "no va" : password));
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
-                password);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
-        return authenticationManager.authenticate(authenticationToken);
-    }
+		return authenticationManager.authenticate(authenticationToken);
+	}
 
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-            Authentication authentication) throws IOException, ServletException {
-        User usuario = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256(Constantes.SECRET_KEY.getBytes());
+	/**
+	 * Se ejecuta en caso de que la autentificacion sea correcta. Se encarga de generar el objeto que se devuelve en la peticion
+	 * con el token JWT metido en su interior.
+	 */
+	@Override
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			FilterChain chain,
+			Authentication authentication) throws IOException, ServletException {
+		User usuario = (User) authentication.getPrincipal();
+		Algorithm algorithm = Algorithm.HMAC256(Constantes.SECRET_KEY.getBytes());
 
-        String accessToken = JWT.create()
-                .withSubject(usuario.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + Constantes.TIEMPO_EXPIRACION))
-                .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles",
-                        usuario.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-                                .collect(Collectors.toList()))
-                .sign(algorithm);
+		String accessToken = JWT.create()
+				.withSubject(usuario.getUsername())
+				.withExpiresAt(new Date(System.currentTimeMillis() + Constantes.TIEMPO_EXPIRACION))
+				.withIssuer(request.getRequestURL().toString())
+				.withClaim("roles",
+					usuario.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+				.sign(algorithm);
 
-        String refreshToken = JWT.create()
-                .withSubject(usuario.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + Constantes.TIEMPO_EXPIRACION * 2)) // Aqui hay que poner mucho tiempo
-                .withIssuer(request.getRequestURL().toString())
-                .sign(algorithm);
+		//Posible mejora a futuro
+		
+		// String refreshToken = JWT.create()
+		// 		.withSubject(usuario.getUsername())
+		// 		.withExpiresAt(new Date(System.currentTimeMillis() + Constantes.TIEMPO_EXPIRACION * 10)) // Aqui hay poner mucho																																																										// tiempo
+		// 		.withIssuer(request.getRequestURL().toString())
+		// 		.sign(algorithm);
 
-        // response.setHeader("accessToken", accessToken);
-        // response.setHeader("refreshToken", refreshToken);
-        Map<String, String> tokens = new HashMap<>();
-        tokens.put("accessToken", accessToken);
-        tokens.put("refreshToken", refreshToken);
+		// En este map se introducen los valores para crear el JSON
+		Map<String, String> tokens = new HashMap<>();
+		tokens.put("accessToken", accessToken);
+		// tokens.put("refreshToken", refreshToken);
 
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-    }
+		// Esto se encarga de crear un objeto JSON en base al map creado para devolverlo como respuesta.
+		new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+
+	}
 }

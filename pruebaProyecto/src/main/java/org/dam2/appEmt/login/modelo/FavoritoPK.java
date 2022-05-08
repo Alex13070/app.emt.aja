@@ -14,6 +14,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * Clave primaria de la tabla de Favorito.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

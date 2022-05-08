@@ -1,62 +1,66 @@
 package org.dam2.appEmt.login.servicios;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
+/**
+ * Clase innecesaria
+ */
 
-import org.dam2.appEmt.login.modelo.Token;
-import org.dam2.appEmt.login.repositorio.TokenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+// import java.time.LocalDateTime;
+// import java.util.Optional;
 
-@Service
-public class TokenServiceImpl implements ITokenService {
+// import org.dam2.appEmt.login.modelo.Token;
+// import org.dam2.appEmt.login.repositorio.TokenRepository;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.stereotype.Service;
 
-    @Autowired
-    private TokenRepository daoKey;
+// @Service
+// public class TokenServiceImpl implements ITokenService {
 
-    @Override
-    public boolean estaOperativo(String token) {
-        boolean operativo = false;
-        Optional<Token> key = daoKey.findById(token);
+//     @Autowired
+//     private TokenRepository daoKey;
 
-        if (key.isPresent()) {
-            LocalDateTime t = key.get().getFechaFin();
-            operativo =  t.isBefore(LocalDateTime.now());
-        }     
+//     @Override
+//     public boolean estaOperativo(String token) {
+//         boolean operativo = false;
+//         Optional<Token> key = daoKey.findById(token);
 
-        return operativo;
-    }
+//         if (key.isPresent()) {
+//             LocalDateTime t = key.get().getFechaFin();
+//             operativo =  t.isBefore(LocalDateTime.now());
+//         }     
 
-    @Override
-    public LocalDateTime fechaFin(String token) {
+//         return operativo;
+//     }
+
+//     @Override
+//     public LocalDateTime fechaFin(String token) {
         
-        LocalDateTime time = LocalDateTime.MIN;
-        Optional<Token> key = daoKey.findById(token);
+//         LocalDateTime time = LocalDateTime.MIN;
+//         Optional<Token> key = daoKey.findById(token);
 
-        if (key.isPresent()) {
-            time = key.get().getFechaFin();
-        } 
+//         if (key.isPresent()) {
+//             time = key.get().getFechaFin();
+//         } 
 
-        return time;
-    }
+//         return time;
+//     }
 
-    @Override
-    public Optional<Token> save(Token key) {
+//     @Override
+//     public Optional<Token> save(Token key) {
 
-        return Optional.ofNullable(daoKey.save(key));
-    }
+//         return Optional.ofNullable(daoKey.save(key));
+//     }
 
-    @Override
-    public boolean delete(String token) {
+//     @Override
+//     public boolean delete(String token) {
         
-        boolean exito = false;
+//         boolean exito = false;
 
-        if (daoKey.existsById(token)) {
-            daoKey.deleteById(token);
-            exito = true;
-        }
+//         if (daoKey.existsById(token)) {
+//             daoKey.deleteById(token);
+//             exito = true;
+//         }
 
-        return exito;
-    }
+//         return exito;
+//     }
     
-}
+// }

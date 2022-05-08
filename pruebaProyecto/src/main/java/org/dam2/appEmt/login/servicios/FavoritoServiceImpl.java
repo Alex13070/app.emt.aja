@@ -6,9 +6,15 @@ import org.dam2.appEmt.login.repositorio.FavoritoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementacion de los microservicios de {@link Favorito}
+ */
 @Service
 public class FavoritoServiceImpl implements IFavoritoService{
 
+    /**
+     * Inyeccion de dependencias de repositorio de usuarios.
+     */
     @Autowired
     private FavoritoRepository daoFavorito;
 

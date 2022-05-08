@@ -10,37 +10,44 @@ import org.dam2.appEmt.login.repositorio.RolRepository;
 import org.dam2.appEmt.login.repositorio.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
- * UsuarioService
+ * Implementacion de los microservicios de {@link Usuario}
  */
 @Service
 public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
 
+    /**
+     * Inyeccion de dependencias de repositorio de usuarios.
+     */
     @Autowired
     private UsuarioRepository daoUsuario;
 
+    /**
+     * Inyeccion de dependencias de repositorio de roles.
+     */
     @Autowired
     private RolRepository daoRol;
 
-    // @Autowired 
-    // private BCryptPasswordEncoder passwordEncoder;
-    
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public boolean insert(Usuario usuario) {
         boolean exito = false;
 
         if (!daoUsuario.existsById(usuario.getCorreo())) {
-            // usuario.setClave(passwordEncoder.encode(usuario.getClave()));
+            usuario.setClave(passwordEncoder.encode(usuario.getClave()));
             daoUsuario.save(usuario);
             exito = true;
         }
-        
+
         return exito;
     }
 
@@ -49,11 +56,11 @@ public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
         boolean exito = false;
 
         if (daoUsuario.existsById(usuario.getCorreo())) {
-
+            usuario.setClave(passwordEncoder.encode(usuario.getClave()));
             daoUsuario.save(usuario);
             exito = true;
         }
-        
+
         return exito;
     }
 
@@ -64,7 +71,7 @@ public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
 
     @Override
     public Optional<Usuario> findByCorreoAndClave(String correo, String clave) {
-        
+
         return daoUsuario.findByCorreoAndClave(correo, clave);
     }
 
@@ -84,17 +91,17 @@ public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
             Usuario u = usuario.get();
             u.addRol(rol.get());
             daoUsuario.save(u);
-            respuesta = true; 
+            respuesta = true;
         }
         return respuesta;
-        
+
     }
 
     @Override
     public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
         Optional<Usuario> usuario = daoUsuario.findByCorreo(correo);
 
-        if (usuario.isEmpty()){
+        if (usuario.isEmpty()) {
             throw new UsernameNotFoundException("Usuario no encontrado en la base de datos");
         }
 
@@ -109,9 +116,9 @@ public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
     }
 
     /*
-    @Override
-    public List<Usuario> findAll() {
-        return (List<Usuario>) daoUsuario.findAll();
-    }
-    */    
+     * @Override
+     * public List<Usuario> findAll() {
+     * return (List<Usuario>) daoUsuario.findAll();
+     * }
+     */
 }

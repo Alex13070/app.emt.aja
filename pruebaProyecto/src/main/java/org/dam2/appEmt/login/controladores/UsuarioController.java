@@ -135,17 +135,20 @@ public class UsuarioController {
 
         try {
 
-            Usuario usuario = Usuario.builder()
-                .correo(request.getCorreo())
-                .clave(request.getClave())
-                .nombre(request.getNombre())
-                .apellidos(request.getApellidos())
-                .fechaNacimiento(request.getFechaNacimiento())
-                .sexo(request.getSexo())
-                .roles(new HashSet<>())
-                .build();
+            Optional<Usuario> find = usuarioService.findById(request.getCorreo());
 
-            if (usuarioService.update(usuario)) {
+            if (find.isPresent()) {
+                
+                Usuario usuario = find.get();
+
+                usuario.setNombre(request.getNombre());
+                usuario.setApellidos(request.getApellidos());
+                usuario.setClave(request.getClave());
+                usuario.setFechaNacimiento(request.getFechaNacimiento());
+                usuario.setSexo(request.getSexo());
+
+                usuarioService.update(usuario);
+
                 logger.info("Usuario actualizado");
                 respuesta = new ResponseEntity<>(request, HttpStatus.ACCEPTED);
             }
@@ -197,6 +200,7 @@ public class UsuarioController {
 
     }
     */
+    
     @PostMapping("/add-rol")
     public ResponseEntity<Void> addRolUsuario(@RequestBody AddRolRequest entity) {
 

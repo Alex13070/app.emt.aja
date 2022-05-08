@@ -3,6 +3,7 @@ package org.dam2.appEmt;
 import java.time.LocalDate;
 import java.util.HashSet;
 
+import org.dam2.appEmt.configuration.Cifrado.MD5;
 import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.Sexo;
 import org.dam2.appEmt.login.modelo.Usuario;
@@ -15,35 +16,43 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+/**
+ * Aplicacion a ejecutar
+ */
 @SpringBootApplication
 public class App {
 
+	
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
 	}
 
+	/**
+	 * Conficuracion de encriptacion de passwords
+	 * @return Algoritmo de encriptacion del app
+	 */
 	@Bean
 	BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-	/*
-	//Posible bum en CustomAuthenticationFilter y CustomAuthorizationFilter
-	@Bean
-	Algorithm algorithm() {
-		return Algorithm.HMAC256(Constantes.SECRET_KEY.getBytes());
-	}
-	*/
+	/**
+	 * Bean para incluir el usuario administrador.
+	 * @param usuarioService microservicios de usuarios
+	 * @param rolService microservicios de rol
+	 * @return Codigo a ejecutar.
+	 */
 	@Bean
 	CommandLineRunner run (IUsuarioService usuarioService, IRolService rolService) {
 		return args -> {
 
-			var encriptar = new BCryptPasswordEncoder();
+			BCryptPasswordEncoder encriptar = new BCryptPasswordEncoder();
 
 			usuarioService.insert(
 				Usuario.builder()
 				.correo(Constantes.CORREO_ADMIN)
-				.clave(encriptar.encode(Constantes.PASSWORD_ADMIN))
+				//Encriptado doble para poder acceder al app desde android
+				.clave(encriptar.encode(MD5.encriptar(Constantes.PASSWORD_ADMIN)))
 				.nombre("Admin")
 					.apellidos("Admin")
 					.fechaNacimiento(LocalDate.of(2000, 1, 1))

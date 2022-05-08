@@ -12,13 +12,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Controlador en el que se abre sesion en los servidores de la EMT.
+ */
 @RestController
 @RequestMapping("/sesion-emt")
 public class LoginEmt {
 	
+	/**
+	 * Controlador en el que se abre sesion en los servidores de la EMT.
+	 * @return Token de acceso a la EMT
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<String> login() {
-		
+	
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> respuesta;
 		
@@ -51,6 +58,11 @@ public class LoginEmt {
 		return respuesta;
 	}
 
+	/**
+	 * Saca el token del json devuelto por la emt.
+	 * @param json Json devuelto por la emt
+	 * @return Token de acceso.
+	 */
     private static String sacarToken(String json) {
 
         String[] array = json.split("\"accessToken\": \"");

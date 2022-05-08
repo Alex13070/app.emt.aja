@@ -7,9 +7,15 @@ import org.dam2.appEmt.login.repositorio.RolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementacion de los microservicios de {@link Rol}
+ */
 @Service
 public class RolServiceImpl implements IRolService{
 
+    /**
+     * Inyeccion de dependencias de repositorio de roles.
+     */
     @Autowired
     private RolRepository daoRol;
 
@@ -19,14 +25,18 @@ public class RolServiceImpl implements IRolService{
     }
 
     @Override
-    public Rol saveRol(String nombre) {
-        Rol respuesta = null;
+    public boolean saveRol(String nombre) {
+        boolean respuesta = false;
 
         Optional<Rol> rol = daoRol.findByNombre(nombre);
         
         if (rol.isEmpty()) {
-            respuesta = Rol.builder().nombre(nombre).build();
-            daoRol.save(respuesta);
+            respuesta = true;
+            daoRol.save(
+                Rol.builder()
+                    .nombre(nombre)
+                    .build()
+            );
         }
 
         return respuesta;

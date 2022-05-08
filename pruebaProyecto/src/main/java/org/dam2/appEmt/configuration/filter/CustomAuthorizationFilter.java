@@ -29,41 +29,53 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Clase encargada de la autorizacion del usuario en nuestro app
+ */
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
+    // Prefijo del token
     private final String PREFIX = "Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        
+        //En caso de que el usuario se quiera logear, no haremos ninguna validacion, pues no necesita autorizacion
         if (request.getServletPath().equals("/usuario/login")) {
             filterChain.doFilter(request, response);
-        } else {
+        } 
+        //En otros casos, se tendra que ver si el usuario tiene un token valido.
+        else {
+            //Buscar el token en el header
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-            
+
             if (authorizationHeader != null && authorizationHeader.startsWith(PREFIX)) {
+
                 try {
+                    //Validacion de token
                     String token = authorizationHeader.substring(PREFIX.length());
                     Algorithm algorithm = Algorithm.HMAC256(Constantes.SECRET_KEY.getBytes());
-                    
+
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
                     List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
+
+                    //Aqui guardamos los roles del usuario
                     Collection<SimpleGrantedAuthority> authorities = roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
                     
                     //authorities.forEach(System.out::println);
 
+                    // Aqui creamos la autorizacion que tendra el usuario.
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
-                    
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     // System.out.println("\n\n\nEntro al 1 \n\n\n");
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
 
+                    //En caso de error, enviaremos este mensaje
                     log.error("Error haciendo login: {}", e.getMessage());
                     response.setHeader("error", e.getMessage());
                     response.setStatus(HttpStatus.FORBIDDEN.value());

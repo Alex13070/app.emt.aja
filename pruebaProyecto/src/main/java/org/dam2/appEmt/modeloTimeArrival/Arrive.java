@@ -8,6 +8,10 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * {@link TimeArrivalBus}
+ */
 @AllArgsConstructor
 @lombok.Data
 @Builder

@@ -46,7 +46,7 @@ public class FavoritoController {
     /**
      * Controlador encargado de guardar favoritos en la base de datos
      * @param favorito Favorito a introducir en la base de datos
-     * @return {@true 202 accepted y favorito introducido}
+     * @return {@true 201 created y favorito introducido}
      *         {@false 400 bad request}
      *         {@exception 500 internalServer error}
      */

@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Peticion de claves primarias de los favoritos de los usuarios
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

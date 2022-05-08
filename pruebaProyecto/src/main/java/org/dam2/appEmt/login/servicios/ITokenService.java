@@ -1,15 +1,18 @@
 package org.dam2.appEmt.login.servicios;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
+/**
+ * Clase innecesaria
+ */
+// import java.time.LocalDateTime;
+// import java.util.Optional;
 
-import org.dam2.appEmt.login.modelo.Token;
+// import org.dam2.appEmt.login.modelo.Token;
 
-public interface ITokenService {
+// public interface ITokenService {
 
-    boolean estaOperativo(String token);
-    LocalDateTime fechaFin (String token);
-    Optional<Token> save(Token key);
-    boolean delete (String token);
+//     boolean estaOperativo(String token);
+//     LocalDateTime fechaFin (String token);
+//     Optional<Token> save(Token key);
+//     boolean delete (String token);
 
-}
+// }

@@ -25,7 +25,21 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
+/**
+ * Tabla usuario con distintas validaciones.
 
+CREATE TABLE usuario (
+    correo VARCHAR(255) NOT NULL,
+    apellidos VARCHAR(30),
+    clave VARCHAR(255),
+    fecha_nacimiento DATE NOT NULL,
+    nombre VARCHAR(20),
+    sexo VARCHAR(255) NOT NULL,
+    PRIMARY KEY (correo)
+)  ENGINE=INNODB;
+
+
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -21,14 +21,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
+    /**
+     * Servicio en el que se validan los usuarios en la base de datos. {@link UsuarioServiceImpl} }
+     */
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * Herramienta para encriptar la password en el lado servidor.
+     */
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+        //A la hora de autentificar a un usuario, se cifran los datos que han llegado desde el cliente
+        //y estos se compraran con una funcion del userDetailsService que esta implementada en la UsuarioServiceImpl,
+        //pues lo que hace el sistema de seguridad de Springboot es encriptar lo que llega desde el cliente, dando 
+        //igual si se trata de MD5, texto plano o lo que quieras. Lo encripta directamente.
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 

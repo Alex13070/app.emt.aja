@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import org.dam2.appEmt.modeloTimeArrival.TimeArrivalBus;
 import org.dam2.appEmt.utilidades.Constantes;
@@ -17,12 +18,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/controladores-emt")
 public class ControladoresEmt {
 
+	/**
+	 * Controlador de la emt que se encarfa de consultar la informacion de la parada pedida.
+	 * @param parada Codigo de parada.
+	 * @return ResponseEntity con un string en el que se se mandara la informacion de la parada en caso de que 
+	 * 		   la peticion sea correcta, en caso contrario, se mandara un error.
+	 */
 	@GetMapping ("/consultar-parada/{parada}")
 	public ResponseEntity<String> consultarParada (@PathVariable String parada)
 	{
@@ -48,15 +56,24 @@ public class ControladoresEmt {
             
 			responseAMandar = new ResponseEntity<>(s, HttpStatus.OK);
 
-		} catch (Exception e) {
+		} catch (JsonSyntaxException e) {
 
 			responseAMandar = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			
 		}
+		catch (RestClientException rce) {
+			
+			responseAMandar = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
 
 		return responseAMandar;
 	}
 
+	/**
+	 * Lectura de archivo en el que estan todas las paradas introducidas.
+	 * @return Listado con todas las paradas. En caso contrario, mensaje de error.
+	 */
 	@SuppressWarnings("unused")
 	@GetMapping ("/listar-paradas")
 	public ResponseEntity<String> listaParadas ()
@@ -72,7 +89,6 @@ public class ControladoresEmt {
 			BufferedReader br = new BufferedReader(fr);
 		){
 			
-			
 			String linea;
 			StringBuffer textoParadas = new StringBuffer();
 			while((linea=br.readLine())!=null){
@@ -81,10 +97,8 @@ public class ControladoresEmt {
 
 			responseAMandar = new ResponseEntity<>(textoParadas.toString(), HttpStatus.OK);
 
-
-
 		} catch (Exception e) {
-			responseAMandar = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			responseAMandar = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		return responseAMandar;

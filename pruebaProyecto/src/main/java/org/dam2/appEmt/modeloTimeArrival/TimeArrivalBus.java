@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Datos a recoger para ver los tiempos de los autobuses.
+ */
 @AllArgsConstructor
 @lombok.Data
 @Builder

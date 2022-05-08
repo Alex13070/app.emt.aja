@@ -10,6 +10,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Peticion con todos los datos del usuario
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
