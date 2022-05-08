@@ -46,13 +46,11 @@ public class App {
 	CommandLineRunner run (IUsuarioService usuarioService, IRolService rolService) {
 		return args -> {
 
-			BCryptPasswordEncoder encriptar = new BCryptPasswordEncoder();
-
 			usuarioService.insert(
 				Usuario.builder()
 				.correo(Constantes.CORREO_ADMIN)
 				//Encriptado doble para poder acceder al app desde android
-				.clave(encriptar.encode(MD5.encriptar(Constantes.PASSWORD_ADMIN)))
+				.clave(MD5.encriptar(Constantes.PASSWORD_ADMIN))
 				.nombre("Admin")
 					.apellidos("Admin")
 					.fechaNacimiento(LocalDate.of(2000, 1, 1))

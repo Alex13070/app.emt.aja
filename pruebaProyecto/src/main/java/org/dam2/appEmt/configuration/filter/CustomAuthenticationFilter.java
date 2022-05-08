@@ -68,9 +68,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	 * con el token JWT metido en su interior.
 	 */
 	@Override
-	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-			FilterChain chain,
-			Authentication authentication) throws IOException, ServletException {
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) 
+		throws IOException, ServletException {
+			
 		User usuario = (User) authentication.getPrincipal();
 		Algorithm algorithm = Algorithm.HMAC256(Constantes.SECRET_KEY.getBytes());
 
