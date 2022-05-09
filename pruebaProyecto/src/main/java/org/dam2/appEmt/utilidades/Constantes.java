@@ -48,7 +48,8 @@ public class Constantes {
 	 * Tiempo de expiracion en milisegundos
 	 */
 	public final static Long TIEMPO_EXPIRACION = 
-		1L  * /* Horas */
+		5L * /* Dias */
+		24L  * /* Horas */
 		60L * /* Minutos */
 		60L * /* Segundos */
 		1000L /* Milisegundos */;

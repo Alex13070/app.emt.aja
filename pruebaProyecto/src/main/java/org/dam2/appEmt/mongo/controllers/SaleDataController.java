@@ -36,7 +36,6 @@ public class SaleDataController {
 
         ResponseEntity<SaleData> respuesta;
         try {
-            //FIXME: tenemos que hablarlo
             if (saleDataService.insert(saleData)) {
                 respuesta = new ResponseEntity<>(saleData, HttpStatus.CREATED);
                 logger.info("Dato de venta insertado");

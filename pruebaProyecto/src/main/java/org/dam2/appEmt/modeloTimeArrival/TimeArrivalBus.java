@@ -2,8 +2,6 @@ package org.dam2.appEmt.modeloTimeArrival;
 
 import java.util.ArrayList;
 
-import com.google.gson.annotations.SerializedName;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -24,7 +22,6 @@ public class TimeArrivalBus {
 	
 	private String datetime;
 	
-	@SerializedName(value = "data")
 	private ArrayList<Data> data;
 
 	public TimeArrivalBus() {

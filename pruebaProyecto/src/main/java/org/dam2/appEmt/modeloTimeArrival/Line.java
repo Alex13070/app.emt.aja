@@ -1,6 +1,7 @@
 package org.dam2.appEmt.modeloTimeArrival;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +25,16 @@ public class Line {
 	private String description;
 	private Integer distance;
 	private String to;
+
+	@JsonProperty(value = "Label")
+	public String getLabel() {
+		return label;
+	}
+
+	@JsonProperty(value = "Description")
+	public String getDescription() {
+		return description;
+	}
 
 	
 	

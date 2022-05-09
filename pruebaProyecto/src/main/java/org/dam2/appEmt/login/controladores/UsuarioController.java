@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 // import org.springframework.security.core.GrantedAuthority;
 // import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,26 +63,25 @@ public class UsuarioController {
     @SuppressWarnings("unused")
 	private final long tiempo = 600000;
     
+    /**
+     * Inyeccion de dependencias de los microservicios de {@link Usuario}
+     */
     @Autowired
     private IUsuarioService usuarioService;
 
+    /**
+     * Inyeccion de dependencias de los microservicios de {@link Rol}
+     */
     @Autowired
     private IRolService rolService;
 
-    ///Pruebas
-    /*
-    @Autowired
-    private FavoritoRepository daoFavorito;
-
-    @Autowired 
-    private UsuarioRepository daoUsuario;
-    */
 
     /**
      * Controlador para insertar usuarios a la base de datos
      * @param usuario Usuario a insertar
      * @return {@true 202 accepted y usuario insertado}
      *         {@false 400 bad request}
+     *         {@exception 500 internal server error}
      */
     @Transactional
     @PostMapping("/insertar")
@@ -127,6 +127,7 @@ public class UsuarioController {
      * @param usuario Usuario a actualizar
      * @return {@true 202 accepted y usuario actualizado}
      *         {@false 400 bad request}
+     *         {@exception 500 internal server error}
      */
     @PutMapping("/actualizar")
     public ResponseEntity<UsuarioRequest> actualizarUsuario(@RequestBody @Valid UsuarioRequest request) {
@@ -165,42 +166,14 @@ public class UsuarioController {
         return respuesta;
 
     }
-    /*
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUsuario(@RequestBody LoginRequest entity) {
-
-        ResponseEntity<LoginResponse> respuesta;
-
-        try {
-
-            Optional<Usuario> usuario = usuarioService.findByCorreoAndClave(entity.getCorreo(), entity.getClave());
-
-            if (usuario.isPresent()) {
-                
-                //Crear token
-                String token = "";
-                
-                LoginResponse responseEntity = new LoginResponse(token);
-
-                //Guardar en la base de datos, en la tabla de Keys
-                logger.info("Se ha hecho login");
-                respuesta = new ResponseEntity<>(responseEntity, HttpStatus.ACCEPTED);
-            }
-            else {
-                logger.info("El usuario no existe");
-                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-        }
-        catch (Exception e) {
-            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
-            logger.error("Error al actualizar usuario");
-        }
-
-        return respuesta;
-
-    }
-    */
     
+    /**
+     * Controlador para actualizar roles de usuarios 
+     * @param usuario id del {@link Usuario} y nombre del {@link Rol}
+     * @return {@true 202 accepted y usuario actualizado}
+     *         {@false 400 bad request}
+     *         {@exception 500 internal server error}
+     */
     @PostMapping("/add-rol")
     public ResponseEntity<Void> addRolUsuario(@RequestBody AddRolRequest entity) {
 
@@ -234,97 +207,14 @@ public class UsuarioController {
         return respuesta;
 
     }
-    /*
-    @SuppressWarnings("unused")
-	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-		//@RequestParam("correo") String correo, @RequestParam("clave") String clave
-    	
-    	String token = ""; 
-        //comprobariamos en la base de datos
-        //if(usuarioService.findByCorreoAndClave(correo, clave).isPresent())
-        //correo.equals("client") && clave.equals("client")
-    	if (request.getCorreo().equals("client") && request.getClave().equals("client"))
-            token = getJWTToken(request.getCorreo());
-			
-		return new ResponseEntity<LoginResponse>(new LoginResponse(token), HttpStatus.OK);
-		
-	}
 
-    */
-    
-    /*
-	private String getJWTToken(String username) {
-
-
-		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-				.commaSeparatedStringToAuthorityList("CLIENT");
-		
-		String token = Jwts
-				.builder()
-				.setId("EmtAJA")
-				.setSubject(username)
-				.claim("authorities",
-						grantedAuthorities.stream()
-								.map(GrantedAuthority::getAuthority)
-								.collect(Collectors.toList()))
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + tiempo))
-				.signWith(SignatureAlgorithm.HS512,
-						secret.getBytes()).compact();
-
-		return "Bearer " + token;
-	}
-
-    */
-
-    /*
-    @GetMapping("/funciona")
-    public ResponseEntity<String> actualizarUsuario() {
-
-        Usuario usuario = Usuario.builder()
-            .correo("correo@correo.com")
-            .clave("Usisis12!f")
-            .nombre("pepe")
-            .apellidos("Pepepe")
-            .fechaNacimiento(LocalDate.of(2002, 12, 12))
-            .sexo(Sexo.HOMBRE)
-            .build();
-
-
-        daoUsuario.save(usuario);
-
-
-        logger.info("Insertando usuaurio");
-
-        Favorito fav = Favorito.builder()
-            .id(
-                FavoritoPK.builder()
-                    .idFavorito("5111")
-                    .usuario(usuario).build()
-                ).
-            nombreParada("Parada")
-            .build();
-
-            Favorito fav2 = Favorito.builder()
-            .id(
-                FavoritoPK.builder()
-                    .idFavorito("5111")
-                    .usuario(usuario).build()
-                ).
-            nombreParada("Parada")
-            .build();
-
-        //Usuario.builder().id(2345L).build();
-
-        daoFavorito.save(fav);
-        daoFavorito.save(fav2);
-
-        daoFavorito.findAll().forEach(System.out::println);
-
-        return new ResponseEntity<>("Ayuda porfavor", HttpStatus.OK);
-
+    /**
+     * Controlador para probar si el token es valido
+     * @return 200 ok
+     */
+    @GetMapping("/probar-token")
+    public ResponseEntity<Void> tokenOperativo(){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-    */
 }
 

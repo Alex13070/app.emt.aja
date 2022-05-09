@@ -2,6 +2,7 @@ package org.dam2.appEmt.modeloTimeArrival;
 
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
@@ -30,6 +31,26 @@ public class Data {
 	
 	@SerializedName("Incident")
 	private Incident incident;
+
+	@JsonProperty(value = "Arrive")
+	public ArrayList<Arrive> getArrive() {
+		return arrive;
+	}
+
+	@JsonProperty(value = "StopInfo")
+	public ArrayList<StopInfo> getStopInfo() {
+		return stopInfo;
+	}
+
+	@JsonProperty(value = "ExtraInfo")
+	public ArrayList<Object> getExtraInfo() {
+		return extraInfo;
+	}
+
+	@JsonProperty(value = "Incident")
+	public Incident getIncident() {
+		return incident;
+	}
 
 	public Data() {
 		super();

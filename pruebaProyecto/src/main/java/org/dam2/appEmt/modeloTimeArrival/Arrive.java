@@ -1,7 +1,9 @@
 package org.dam2.appEmt.modeloTimeArrival;
 
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
+
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,12 +34,22 @@ public class Arrive {
 	@SerializedName(value = "DistanceBus")	
 	private Integer distanceBus;
 	private String positionTypeBus;
+
+	@JsonProperty(value = "DistanceBus")
+	public Integer getDistanceBus(){
+		return distanceBus;
+	}
+
+	@JsonProperty(value = "positionTypeBus")
+	public String getPositionTypeBus(){
+		return positionTypeBus;
+	}
 	
 	
-	public org.springframework.data.geo.Point getGeometry() {
+	
+	public GeoJsonPoint sacarPunto() {
 		
-		//Pasar de un tipoo de punto a otro
-		return new org.springframework.data.geo.Point (geometry.getCoordinates().get(0), geometry.getCoordinates().get(1));
+		return new GeoJsonPoint (geometry.getCoordinates().get(0), geometry.getCoordinates().get(1));
 		
 	}
 }

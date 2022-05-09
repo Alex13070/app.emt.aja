@@ -1,6 +1,9 @@
 package org.dam2.appEmt.modeloTimeArrival;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
+
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,11 +31,24 @@ public class StopInfo {
 	@SerializedName(value = "Direction")
 	private String direction;
 
+	@JsonProperty(value = "StopLines")
+	public StopLines getStopLines(){
+		return stopLines;
+	}
+
+	@JsonProperty(value = "Description")
+	public String getDescription(){
+		return description;
+	}
+
+	@JsonProperty(value = "Direction")
+	public String getDirection(){
+		return direction;
+	}
 	
-	
-	public org.springframework.data.geo.Point getGeometry() {
+	public GeoJsonPoint sacarPunto() {
 		
-		return new org.springframework.data.geo.Point (geometry.getCoordinates().get(0), geometry.getCoordinates().get(1));
+		return new GeoJsonPoint (geometry.getCoordinates().get(0), geometry.getCoordinates().get(1));
 		
 	}
 

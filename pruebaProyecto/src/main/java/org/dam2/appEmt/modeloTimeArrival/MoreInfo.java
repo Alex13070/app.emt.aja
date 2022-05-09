@@ -1,6 +1,7 @@
 package org.dam2.appEmt.modeloTimeArrival;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
@@ -24,5 +25,20 @@ public class MoreInfo {
 	
 	@SerializedName(value = "@length")
 	private String length;
+
+	@JsonProperty(value = "@url")
+	public String getUrl() {
+		return url;
+	}
+
+	@JsonProperty(value = "@type")
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	@JsonProperty(value = "@length")
+	public String getLength() {
+		return length;
+	}
 
 }

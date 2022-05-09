@@ -69,7 +69,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers("/mongo/**").hasAuthority(NombreRol.ROLE_ADMIN);
 
         //Permisos de acceso a controladores de la emt
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/consultar-parada/{parada}").authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/consultar-parada/**").authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/listar-paradas").authenticated();
 
         http.addFilter(customAuthenticationFilter);
 

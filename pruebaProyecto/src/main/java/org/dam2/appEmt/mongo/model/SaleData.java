@@ -1,12 +1,14 @@
 package org.dam2.appEmt.mongo.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
-import org.dam2.appEmt.modeloTimeArrival.Point;
+import org.dam2.appEmt.login.modelo.Sexo;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -42,10 +44,10 @@ public class SaleData implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @EqualsAndHashCode.Include
     private String id;
-    private String fecha;
+    private LocalDateTime fecha;
     private Integer edad;
-    private String sexo;
+    private Sexo sexo;
     //importar el del modelo de time arrival coje geojson
-    private Point geometry;
+    private GeoJsonPoint geometry;
 
 }

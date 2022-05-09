@@ -16,7 +16,6 @@ public class SaleDataServiceImpl implements ISaleDataService {
 
     @Override
     public boolean insert(SaleData saleData) {
-        //FIXME: hay que verlo, si
         boolean exito;
         try {
 
