@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     // Prefijo del token
-    private final String PREFIX = "Bearer ";
+    private static final String PREFIX = "Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -55,11 +55,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
                 try {
                     //Validacion de token
-                    String token = authorizationHeader.substring(PREFIX.length());
-                    Algorithm algorithm = Algorithm.HMAC256(Constantes.SECRET_KEY.getBytes());
-
-                    JWTVerifier verifier = JWT.require(algorithm).build();
-                    DecodedJWT decodedJWT = verifier.verify(token);
+                    DecodedJWT decodedJWT = decodeToken(authorizationHeader);
                     String username = decodedJWT.getSubject();
                     List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
 
@@ -90,5 +86,18 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
         }
+    }
+
+    private static DecodedJWT decodeToken(String authorizationHeader) {
+
+        String token = authorizationHeader.substring(PREFIX.length());
+        Algorithm algorithm = Algorithm.HMAC256(Constantes.SECRET_KEY.getBytes());
+
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        return (DecodedJWT) verifier.verify(token);
+    }
+
+    public static String getUserIdFromToken (String token) {
+        return decodeToken(token).getSubject();
     }
 }

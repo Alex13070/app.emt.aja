@@ -37,7 +37,4 @@ public class MD5 {
         return hashtext;
     }
 
-    public static void main(String[] args) {
-        System.out.println(encriptar("Xacvrwe112?"));
-    }
 }
