@@ -2,7 +2,7 @@ package org.dam2.appEmt.utilidades;
 
 public class Constantes {
     
-	/*
+	/**
 	 *	Json que hay que introducir para hacer la peticion de los tiempos de parada de la EMT
 	 */
     public static final String JSON_TIME_ARRIVAL = "{\r\n"
@@ -13,12 +13,12 @@ public class Constantes {
 			+ "		\"DateTime_Referenced_Incidencies_YYYYMMDD\":\"????????\"\r\n"
 			+ "	}";
 
-	/*
+	/**
 	 *	URL para hacer login en los servidores de la EMT
 	 */
 	public static final String URL_LOGIN = "https://openapi.emtmadrid.es/v1/mobilitylabs/user/login/";
 	
-	/*
+	/**
 	 *	URL para pedir los tiempos de buses de una parada
 	 */
 	public static final String URL_TIME_ARRIVAL = "https://openapi.emtmadrid.es/v1/transport/busemtmad/stops/{}/arrives//";
@@ -27,7 +27,6 @@ public class Constantes {
 	 *	URL para pedir un json con todas las paradas de la comunidad de madrid
 	 */
 	public static final String URL_LISTA_PARADAS = "https://openapi.emtmadrid.es/v1/transport/busemtmad/stops/list/";
-
 
 	/**
 	 * Correo del administrador
@@ -53,5 +52,8 @@ public class Constantes {
 		60L * /* Minutos */
 		60L * /* Segundos */
 		1000L /* Milisegundos */;
+
+
+	public static final String URL_ARCHIVO_LISTA_PARADAS = "./app.emt.aja/pruebaProyecto/datos/pruebaProparadas.txt";
 
 }

@@ -1,8 +1,10 @@
 package org.dam2.appEmt.controladoresEmt;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -31,6 +33,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/controladores-emt")
 public class ControladoresEmt {
@@ -124,7 +129,7 @@ public class ControladoresEmt {
 		ResponseEntity<String> response;
         ResponseEntity<String> responseAMandar;
 		String s;
-		File archivo = new File (Variables.urlListaParadas);
+		File archivo = new File (Constantes.URL_ARCHIVO_LISTA_PARADAS);
 		
 		try(
 			FileReader fr = new FileReader (archivo);
@@ -146,12 +151,32 @@ public class ControladoresEmt {
 		return responseAMandar;
 	}
 
-	/*
-	//quitar, lo pongo para hacer pruebas
-	public static void main(String[] args) {
-		PruebaController p = new PruebaController();
-		ResponseEntity<String> resp = p.listaParadas();
-		System.out.println(resp.getBody().toString());
-	}
-	*/
+	public static void recogerParadas() {
+
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response;
+		String paradas;
+
+		File file = new File (Constantes.URL_ARCHIVO_LISTA_PARADAS);
+
+
+		try (BufferedWriter in= new BufferedWriter(new FileWriter(file))){
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.set("accessToken", Variables.emtKey);
+			
+			HttpEntity<String> request = new HttpEntity<String>(headers);
+
+			response = restTemplate.postForEntity(Constantes.URL_LISTA_PARADAS, request, String.class);
+
+			
+			paradas = response.getBody();
+
+			in.write(paradas);			
+
+		} catch (Exception e) {
+			log.error("Error fatal: No se ha podido insertar los datos en el fichero. \nMessage: {}", e.getMessage());
+		}
+    }
+
 }
