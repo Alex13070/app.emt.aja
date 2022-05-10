@@ -70,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
         //Permisos de acceso a controladores de la emt
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/consultar-parada/**").authenticated();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/listar-paradas").authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/listar-paradas").authenticated();
 
         http.addFilter(customAuthenticationFilter);
 
