@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 import org.dam2.appEmt.configuration.Cifrado.MD5;
-import org.dam2.appEmt.controladoresEmt.ControladoresEmt;
 import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.Sexo;
 import org.dam2.appEmt.login.modelo.Usuario;
@@ -25,7 +24,7 @@ public class App {
 
 	
 	public static void main(String[] args) {
-		ControladoresEmt.recogerParadas();
+		// ControladoresEmt.recogerParadas(); --> pruebas
 		SpringApplication.run(App.class, args);
 	}
 
