@@ -1,5 +1,7 @@
 package org.dam2.appEmt.login.repositorio;
 
+import java.util.List;
+
 import org.dam2.appEmt.login.modelo.Favorito;
 import org.dam2.appEmt.login.modelo.FavoritoPK;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +20,6 @@ public interface FavoritoRepository extends JpaRepository<Favorito, FavoritoPK>{
      * @return coleccion con los favoritos del usuario
      */
     @Query("SELECT f FROM Favorito f WHERE f.id.usuario.id = ?1")
-    public Favorito[] obtenerFavoritosPorUsuario (String id);
+    public List<Favorito> obtenerFavoritosPorUsuario (String id);
     
 }

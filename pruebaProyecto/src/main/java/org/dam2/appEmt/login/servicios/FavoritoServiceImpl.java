@@ -1,5 +1,7 @@
 package org.dam2.appEmt.login.servicios;
 
+import java.util.List;
+
 import org.dam2.appEmt.login.modelo.Favorito;
 import org.dam2.appEmt.login.modelo.FavoritoPK;
 import org.dam2.appEmt.login.repositorio.FavoritoRepository;
@@ -56,7 +58,7 @@ public class FavoritoServiceImpl implements IFavoritoService{
     }
 
     @Override
-    public Favorito[] findAllByUser(String id) {
+    public List<Favorito> findAllByUser(String id) {
         return daoFavorito.obtenerFavoritosPorUsuario(id);
     }
 

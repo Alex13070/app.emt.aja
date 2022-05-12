@@ -1,5 +1,7 @@
 package org.dam2.appEmt.login.servicios;
 
+import java.util.List;
+
 import org.dam2.appEmt.login.modelo.Favorito;
 import org.dam2.appEmt.login.modelo.FavoritoPK;
 
@@ -37,6 +39,6 @@ public interface IFavoritoService {
      * @param idUsuario Id del usuario que esta logeado
      * @return coleccion de favoritos del usuario.
      */
-    Favorito[] findAllByUser(String idUsuario);
+    List<Favorito> findAllByUser(String idUsuario);
 
 }

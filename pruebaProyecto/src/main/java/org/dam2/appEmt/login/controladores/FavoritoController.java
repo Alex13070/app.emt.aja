@@ -1,8 +1,11 @@
 package org.dam2.appEmt.login.controladores;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.dam2.appEmt.login.modelPeticion.FavoritoRequest;
+import org.dam2.appEmt.login.modelPeticion.FavoritoResponse;
 import org.dam2.appEmt.login.modelPeticion.PKFavoritoRequest;
 import org.dam2.appEmt.login.modelo.Favorito;
 import org.dam2.appEmt.login.modelo.FavoritoPK;
@@ -19,8 +22,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -51,9 +54,9 @@ public class FavoritoController {
      *         {@exception 500 internalServer error}
      */
     @PostMapping("/insertar")
-    public ResponseEntity<Favorito> guardarFavorito(@RequestBody FavoritoRequest entity) {
+    public ResponseEntity<FavoritoRequest> guardarFavorito(@RequestBody FavoritoRequest entity) {
 
-        ResponseEntity<Favorito> respuesta;
+        ResponseEntity<FavoritoRequest> respuesta;
 
         try {
 
@@ -75,15 +78,15 @@ public class FavoritoController {
 
 
             if (favoritoService.save(favorito)){
-                respuesta = new ResponseEntity<Favorito>(favorito, HttpStatus.CREATED);
+                respuesta = new ResponseEntity<FavoritoRequest>(entity, HttpStatus.CREATED);
                 logger.info("Favorito insertado");
             }
             else {
-                respuesta = new ResponseEntity<Favorito>(HttpStatus.BAD_REQUEST);
+                respuesta = new ResponseEntity<FavoritoRequest>(HttpStatus.BAD_REQUEST);
                 logger.info("Error: El favorito ya existe");
             }
         } catch (Exception e) {
-            respuesta = new ResponseEntity<Favorito>(HttpStatus.INTERNAL_SERVER_ERROR);
+            respuesta = new ResponseEntity<FavoritoRequest>(HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Error al insertar favorito");
         }
 
@@ -98,9 +101,9 @@ public class FavoritoController {
      *         {@exception 500 internalServer error}
      */
     @PutMapping("/actualizar")
-    public ResponseEntity<Favorito> actualizarFavorito (@RequestBody FavoritoRequest entity) {
+    public ResponseEntity<FavoritoRequest> actualizarFavorito (@RequestBody FavoritoRequest entity) {
 
-        ResponseEntity<Favorito> respuesta;
+        ResponseEntity<FavoritoRequest> respuesta;
 
         try {
 
@@ -121,16 +124,16 @@ public class FavoritoController {
                 .build();
 
             if (favoritoService.update(favorito)){
-                respuesta = new ResponseEntity<Favorito>(favorito, HttpStatus.ACCEPTED);
+                respuesta = new ResponseEntity<FavoritoRequest>(entity, HttpStatus.ACCEPTED);
                 logger.info("Favorito actualizado");
             }
             else {
-                respuesta = new ResponseEntity<Favorito>(HttpStatus.BAD_REQUEST);
+                respuesta = new ResponseEntity<FavoritoRequest>(HttpStatus.BAD_REQUEST);
                 logger.info("Error: El favorito a actualizar no existe");
             }
 
         } catch (Exception e) {
-            respuesta = new ResponseEntity<Favorito>(HttpStatus.INTERNAL_SERVER_ERROR);
+            respuesta = new ResponseEntity<FavoritoRequest>(HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Error al insertar favorito");
         }
 
@@ -186,23 +189,32 @@ public class FavoritoController {
      *         {@false 400 bad request}
      */
     @GetMapping("/obtener-favoritos")
-    public ResponseEntity<Favorito[]> obtenerFavoritos(@RequestParam String id) {
+    public ResponseEntity<List<FavoritoResponse>> obtenerFavoritos(@RequestHeader String idUsuario) {
 
-        ResponseEntity<Favorito[]> respuesta;
+        ResponseEntity<List<FavoritoResponse>> respuesta;
 
         try {
-            if (usuarioService.existsById(id)){
-                Favorito[] favoritos = favoritoService.findAllByUser(id);
-                respuesta = new ResponseEntity<Favorito[]>(favoritos, HttpStatus.ACCEPTED);
+            if (usuarioService.existsById(idUsuario)){
+
+                List<Favorito> favs = favoritoService.findAllByUser(idUsuario);
+
+                List<FavoritoResponse> favoritos = favs.stream().map( fav -> 
+                    FavoritoResponse.builder()
+                        .idParada(fav.getId().getIdFavorito())
+                        .nombreParada(fav.getNombreParada())
+                        .build()
+                ).collect(Collectors.toList());
+
+                respuesta = new ResponseEntity<>(favoritos, HttpStatus.ACCEPTED);
                 logger.info("Obtencion de favoritos de usuarios");
             }
             else {
-                respuesta = new ResponseEntity<Favorito[]>(HttpStatus.BAD_REQUEST);
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 logger.error("Error: El usuario introducido no existe");
             }
         } catch (Exception e) {
-            respuesta = new ResponseEntity<Favorito[]>(HttpStatus.INTERNAL_SERVER_ERROR);
-            logger.error("Error al buscar favoritos");
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.error("Error al buscar favoritos" + e.getMessage());
         }
 
         return respuesta;
