@@ -28,6 +28,12 @@ public class Constantes {
 	 */
 	public static final String URL_LISTA_PARADAS = "https://openapi.emtmadrid.es/v1/transport/busemtmad/stops/list/";
 
+	/*
+	 *	URL para pedir un json con todas las paradas de una línea de bus concreta ordenadas de A a B
+	 *  Dir 1 es de A a B y dir 2 es de B a A
+	 */
+	public static final String URL_LISTA_PARADAS_DE_UNA_LINEA = "https://openapi.emtmadrid.es/v1/transport/busemtmad/lines/{linea}/stops/{dir}/";
+
 	/**
 	 * Correo del administrador
 	 */

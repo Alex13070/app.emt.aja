@@ -14,6 +14,7 @@ import com.google.gson.JsonSyntaxException;
 
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
+import org.dam2.appEmt.modeloTimeArrival.ListaParadasLinea;
 import org.dam2.appEmt.modeloTimeArrival.TimeArrivalBus;
 import org.dam2.appEmt.mongo.model.SaleData;
 import org.dam2.appEmt.mongo.service.ISaleDataService;
@@ -22,6 +23,7 @@ import org.dam2.appEmt.utilidades.Variables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -179,5 +181,64 @@ public class ControladoresEmt {
 		}
     }
 
+	@GetMapping ("/consultar-linea/{linea}/{dir}")
+	public ResponseEntity<String> listarParadasDeUnaLinea (@PathVariable String linea, @PathVariable String dir, @RequestHeader("idUsuario") String idUsuario)
+	{
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response;
+        ResponseEntity<String> responseAMandar;
+		String s;
+		try {
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.set("accessToken", Variables.emtKey);
+			
+			response = restTemplate.exchange(Constantes.URL_LISTA_PARADAS_DE_UNA_LINEA.replace("{linea}", linea).replace("{dir}", dir), HttpMethod.GET, new HttpEntity<Object>(headers), String.class);
+			
+			//response = restTemplate.getForEntity(Constantes.URL_LISTA_PARADAS_DE_UNA_LINEA.replace("{}", linea), String.class);
+
+			Gson gson = new Gson();
+			
+			s = response.getBody();
+			
+			//lo pasa a esto solo para coger luego el mumero
+			//TODO: implementarlo bien?
+			ListaParadasLinea tab = gson.fromJson(s, ListaParadasLinea.class);
+
+			//TimeArrivalBus tab = response.getBody();
+
+			if (!tab.getCode().equals("00")) {
+				System.out.println();
+				System.out.println();
+				System.err.println(s);
+				System.out.println();
+				System.out.println();
+				throw new RuntimeException("Error de peticion");
+			}
+			/*
+			Optional<Usuario> usuario = usuarioService.findById(idUsuario);
+			
+			if (usuario.isPresent()) {
+				guardarDatos (tab, usuario.get());
+			}
+			else {
+				throw new UsernameNotFoundException("El nombre del usuario no existe.");
+			}
+			*/
+            
+			responseAMandar = new ResponseEntity<>(s, HttpStatus.OK);
+
+		} catch (JsonSyntaxException e) {
+
+			responseAMandar = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			
+		}
+		catch (RestClientException rce) {
+			System.err.println(rce.getMessage());
+			responseAMandar = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return responseAMandar;
+	}
 	
 }
