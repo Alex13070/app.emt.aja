@@ -35,6 +35,9 @@ public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
     @Autowired
     private RolRepository daoRol;
 
+    /**
+     * Codificador de contraseña
+     */
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 

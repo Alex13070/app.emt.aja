@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 
 import javax.validation.Valid;
 
+import org.dam2.appEmt.configuration.filter.CustomAuthorizationFilter;
+import org.dam2.appEmt.login.modelPeticion.ActualizarUsuarioRequest;
 import org.dam2.appEmt.login.modelPeticion.AddRolRequest;
 import org.dam2.appEmt.login.modelPeticion.UsuarioRequest;
 import org.dam2.appEmt.login.modelo.NombreRol;
@@ -25,15 +27,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 // import org.springframework.security.core.GrantedAuthority;
 // import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 // import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.http.HttpHeaders;
 
 //import io.jsonwebtoken.Jwts;
 //import io.jsonwebtoken.SignatureAlgorithm;
@@ -74,6 +80,9 @@ public class UsuarioController {
      */
     @Autowired
     private IRolService rolService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 
     /**
@@ -119,6 +128,9 @@ public class UsuarioController {
         }
 
         return respuesta;
+
+
+        
     }
 
 
@@ -126,32 +138,47 @@ public class UsuarioController {
      * Controlador para actualizar usuarios 
      * @param usuario Usuario a actualizar
      * @return {@true 202 accepted y usuario actualizado}
-     *         {@false 400 bad request}
+     *         {@false 40X error}
      *         {@exception 500 internal server error}
      */
     @PutMapping("/actualizar")
-    public ResponseEntity<UsuarioRequest> actualizarUsuario(@RequestBody @Valid UsuarioRequest request) {
+    public ResponseEntity<ActualizarUsuarioRequest> actualizarUsuario(@RequestBody ActualizarUsuarioRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        ResponseEntity<UsuarioRequest> respuesta;
+        ResponseEntity<ActualizarUsuarioRequest> respuesta;
 
         try {
 
-            Optional<Usuario> find = usuarioService.findById(request.getCorreo());
+            String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
+
+            Optional<Usuario> find = usuarioService.findById(idUsuario);
 
             if (find.isPresent()) {
                 
+                @Valid
                 Usuario usuario = find.get();
+                logger.info("Token igual {}", passwordEncoder.matches(request.getClave(), usuario.getClave()));                
 
-                usuario.setNombre(request.getNombre());
-                usuario.setApellidos(request.getApellidos());
-                usuario.setClave(request.getClave());
-                usuario.setFechaNacimiento(request.getFechaNacimiento());
-                usuario.setSexo(request.getSexo());
+                if (passwordEncoder.matches(request.getClave(), usuario.getClave())) {
 
-                usuarioService.update(usuario);
+                    usuario.setNombre(request.getNombre());
+                    usuario.setApellidos(request.getApellidos());
+                    usuario.setClave(request.getClave());
+                    usuario.setFechaNacimiento(request.getFechaNacimiento());
+                    usuario.setSexo(request.getSexo());
 
-                logger.info("Usuario actualizado");
-                respuesta = new ResponseEntity<>(request, HttpStatus.ACCEPTED);
+                    if (!request.getNuevaClave().equals("")) {
+                        usuario.setClave(request.getNuevaClave());
+                    }
+
+                    usuarioService.update(usuario);
+
+                    logger.info("Usuario actualizado");
+                    respuesta = new ResponseEntity<>(request, HttpStatus.ACCEPTED);
+                }
+                else {
+                    logger.info("Clave incorrecta");
+                    respuesta = new ResponseEntity<>( HttpStatus.NOT_ACCEPTABLE);
+                }
             }
             else {
                 logger.info("El usuario no existe");
@@ -215,6 +242,52 @@ public class UsuarioController {
     @GetMapping("/probar-token")
     public ResponseEntity<Void> tokenOperativo(){
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    /**
+     * Controlador para buscar datos de usuario 
+     * @param usuario id del {@link Usuario} y nombre del {@link Rol}
+     * @return {@true 202 accepted y usuario}
+     *         {@false 400 bad request}
+     *         {@exception 500 internal server error}
+     */
+    @GetMapping("/buscar")
+    public ResponseEntity<UsuarioRequest> findById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+        ResponseEntity<UsuarioRequest> respuesta;
+
+        try {
+
+            String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
+
+            Optional<Usuario> optional = usuarioService.findById(idUsuario);
+            
+            if (optional.isPresent()) {
+                Usuario usu = optional.get();
+                
+                UsuarioRequest usuario = UsuarioRequest.builder()
+                    .nombre(usu.getNombre())
+                    .apellidos(usu.getApellidos())
+                    .fechaNacimiento(usu.getFechaNacimiento())
+                    .clave("")
+                    .sexo(usu.getSexo())
+                    .build();
+
+                respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
+            }
+            else {
+                logger.info("El usuario no existe");
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        catch (Exception e) {
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+            logger.error("Error al add rol al usuario");
+        }
+
+        return respuesta;
+
     }
 }
 
