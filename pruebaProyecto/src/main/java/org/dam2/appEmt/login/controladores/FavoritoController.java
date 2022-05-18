@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.dam2.appEmt.login.modelPeticion.BorrarFavoritoRequest;
 import org.dam2.appEmt.login.modelPeticion.FavoritoResponse;
 import org.dam2.appEmt.configuration.filter.CustomAuthorizationFilter;
 import org.dam2.appEmt.login.modelo.Favorito;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -158,7 +158,7 @@ public class FavoritoController {
      *         {@exception 500 internalServer error}
      */
     @DeleteMapping("/borrar")
-    public ResponseEntity<Void> borrarFavorito (@RequestParam("idParada") String idParada, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Void> borrarFavorito (@RequestBody BorrarFavoritoRequest favorito, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         ResponseEntity<Void> respuesta;
 
@@ -174,7 +174,7 @@ public class FavoritoController {
 
             FavoritoPK id = FavoritoPK.builder()
                 .usuario(usuario.get())
-                .idFavorito(idParada)
+                .idFavorito(favorito.getIdParada())
                 .build();
 
             if (favoritoService.delete(id)){
