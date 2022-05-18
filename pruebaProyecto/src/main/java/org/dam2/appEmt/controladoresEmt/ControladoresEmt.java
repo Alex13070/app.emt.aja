@@ -12,6 +12,7 @@ import java.util.Optional;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.dam2.appEmt.configuration.filter.CustomAuthorizationFilter;
 import org.dam2.appEmt.login.modelo.Usuario;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
 import org.dam2.appEmt.modeloTimeArrival.ListaParadasLinea;
@@ -32,7 +33,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class ControladoresEmt {
 	 * 		   la peticion sea correcta, en caso contrario, se mandara un error.
 	 */
 	@GetMapping ("/consultar-parada/{parada}")
-	public ResponseEntity<TimeArrivalBus> consultarParada (@PathVariable String parada, @RequestHeader("idUsuario") String idUsuario)
+	public ResponseEntity<TimeArrivalBus> consultarParada (@PathVariable String parada, @RequestHeader(HttpHeaders.AUTHORIZATION) String token)
 	{
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response;
@@ -78,9 +78,11 @@ public class ControladoresEmt {
 
 			//TimeArrivalBus tab = response.getBody();
 
-			if (!tab.getCode().equals("00")) {
-				throw new RuntimeException("Error de peticion");
-			}
+			// if (!tab.getCode().equals("00")) {
+			// 	throw new RuntimeException("Error de peticion");
+			// }
+			
+			String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
 			Optional<Usuario> usuario = usuarioService.findById(idUsuario);
 			
@@ -98,7 +100,7 @@ public class ControladoresEmt {
 			responseAMandar = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			
 		}
-		catch (RestClientException rce) {
+		catch (Exception rce) {
 			
 			responseAMandar = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -233,7 +235,7 @@ public class ControladoresEmt {
 			responseAMandar = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			
 		}
-		catch (RestClientException rce) {
+		catch (Exception rce) {
 			System.err.println(rce.getMessage());
 			responseAMandar = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

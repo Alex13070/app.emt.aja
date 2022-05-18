@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.dam2.appEmt.login.modelPeticion.FavoritoRequest;
+import javax.validation.Valid;
+
 import org.dam2.appEmt.login.modelPeticion.FavoritoResponse;
-import org.dam2.appEmt.login.modelPeticion.PKFavoritoRequest;
+import org.dam2.appEmt.configuration.filter.CustomAuthorizationFilter;
 import org.dam2.appEmt.login.modelo.Favorito;
 import org.dam2.appEmt.login.modelo.FavoritoPK;
 import org.dam2.appEmt.login.modelo.Usuario;
@@ -15,6 +16,7 @@ import org.dam2.appEmt.login.servicios.IUsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -54,39 +57,42 @@ public class FavoritoController {
      *         {@exception 500 internalServer error}
      */
     @PostMapping("/insertar")
-    public ResponseEntity<FavoritoRequest> guardarFavorito(@RequestBody FavoritoRequest entity) {
+    public ResponseEntity<FavoritoResponse> guardarFavorito(@RequestBody FavoritoResponse entity, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        ResponseEntity<FavoritoRequest> respuesta;
+        ResponseEntity<FavoritoResponse> respuesta;
+
+        String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
         try {
 
-            Optional<Usuario> usuario = usuarioService.findById(entity.getPk().getIdUsuario());
+            Optional<Usuario> usuario = usuarioService.findById(idUsuario);
 
             if (usuario.isEmpty()) {
                 throw new Exception("El usuario introducido no existe");
             }
 
+            @Valid
             Favorito favorito = Favorito.builder()
                 .id(
                     FavoritoPK.builder()
                         .usuario(usuario.get())
-                        .idFavorito(entity.getPk().getIdParada())
+                        .idFavorito(entity.getIdParada())
                         .build()
                 )
-                .nombreParada(entity.getNombre())
+                .nombreParada(entity.getNombreParada())
                 .build();
 
 
             if (favoritoService.save(favorito)){
-                respuesta = new ResponseEntity<FavoritoRequest>(entity, HttpStatus.CREATED);
+                respuesta = new ResponseEntity<>(entity, HttpStatus.CREATED);
                 logger.info("Favorito insertado");
             }
             else {
-                respuesta = new ResponseEntity<FavoritoRequest>(HttpStatus.BAD_REQUEST);
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 logger.info("Error: El favorito ya existe");
             }
         } catch (Exception e) {
-            respuesta = new ResponseEntity<FavoritoRequest>(HttpStatus.INTERNAL_SERVER_ERROR);
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Error al insertar favorito");
         }
 
@@ -101,39 +107,43 @@ public class FavoritoController {
      *         {@exception 500 internalServer error}
      */
     @PutMapping("/actualizar")
-    public ResponseEntity<FavoritoRequest> actualizarFavorito (@RequestBody FavoritoRequest entity) {
+    public ResponseEntity<FavoritoResponse> actualizarFavorito (
+        @RequestBody FavoritoResponse entity, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        ResponseEntity<FavoritoRequest> respuesta;
+        ResponseEntity<FavoritoResponse> respuesta;
+
+        String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
         try {
 
-            Optional<Usuario> usuario = usuarioService.findById(entity.getPk().getIdUsuario());
+            Optional<Usuario> usuario = usuarioService.findById(idUsuario);
 
             if (usuario.isEmpty()) {
                 throw new Exception("El usuario introducido no existe");
             }
 
+            @Valid
             Favorito favorito = Favorito.builder()
                 .id(
                     FavoritoPK.builder()
                         .usuario(usuario.get())
-                        .idFavorito(entity.getPk().getIdParada())
+                        .idFavorito(entity.getIdParada())
                         .build()
                 )
-                .nombreParada(entity.getNombre())
+                .nombreParada(entity.getNombreParada())
                 .build();
 
             if (favoritoService.update(favorito)){
-                respuesta = new ResponseEntity<FavoritoRequest>(entity, HttpStatus.ACCEPTED);
+                respuesta = new ResponseEntity<>(entity, HttpStatus.ACCEPTED);
                 logger.info("Favorito actualizado");
             }
             else {
-                respuesta = new ResponseEntity<FavoritoRequest>(HttpStatus.BAD_REQUEST);
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 logger.info("Error: El favorito a actualizar no existe");
             }
 
         } catch (Exception e) {
-            respuesta = new ResponseEntity<FavoritoRequest>(HttpStatus.INTERNAL_SERVER_ERROR);
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Error al insertar favorito");
         }
 
@@ -143,18 +153,20 @@ public class FavoritoController {
     /**
      * Controlador encargado de borrar favoritos de la base de datos
      * @param favorito Favorito a borrar de la base de datos
-     * @return {@true 202 accepted y favorito borrado}
+     * @return {@true 202 accepted }
      *         {@false 400 bad request}
      *         {@exception 500 internalServer error}
      */
     @DeleteMapping("/borrar")
-    public ResponseEntity<FavoritoPK> borrarFavorito (@RequestBody PKFavoritoRequest entity) {
+    public ResponseEntity<Void> borrarFavorito (@RequestParam("idParada") String idParada, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
-        ResponseEntity<FavoritoPK> respuesta;
+        ResponseEntity<Void> respuesta;
+
+        String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
         try {
 
-            Optional<Usuario> usuario = usuarioService.findById(entity.getIdUsuario());
+            Optional<Usuario> usuario = usuarioService.findById(idUsuario);
 
             if (usuario.isEmpty()) {
                 throw new Exception("El usuario introducido no existe");
@@ -162,20 +174,20 @@ public class FavoritoController {
 
             FavoritoPK id = FavoritoPK.builder()
                 .usuario(usuario.get())
-                .idFavorito(entity.getIdParada())
+                .idFavorito(idParada)
                 .build();
 
             if (favoritoService.delete(id)){
-                respuesta = new ResponseEntity<FavoritoPK>(id, HttpStatus.ACCEPTED);
+                respuesta = new ResponseEntity<>(HttpStatus.ACCEPTED);
                 logger.info("Favorito borrado");
             }
             else {
-                respuesta = new ResponseEntity<FavoritoPK>(HttpStatus.BAD_REQUEST);
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 logger.info("Error: el favorito introducido no existe");
             }
 
         } catch (Exception e) {
-            respuesta = new ResponseEntity<FavoritoPK>(HttpStatus.INTERNAL_SERVER_ERROR);
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Error al eliminar favorito");
         }
         
@@ -187,11 +199,15 @@ public class FavoritoController {
      * @param id Id del usuario del que se quieren recuperar los favoritos
      * @return {@true 202 accepted y coleccion de favoritos del usuario}
      *         {@false 400 bad request}
+     *         {@exception 500 internalServer error}
      */
     @GetMapping("/obtener-favoritos")
-    public ResponseEntity<List<FavoritoResponse>> obtenerFavoritos(@RequestHeader String idUsuario) {
+    public ResponseEntity<List<FavoritoResponse>> obtenerFavoritos(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         ResponseEntity<List<FavoritoResponse>> respuesta;
+
+        
+        String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
         try {
             if (usuarioService.existsById(idUsuario)){

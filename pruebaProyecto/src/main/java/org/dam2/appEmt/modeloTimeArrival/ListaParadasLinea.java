@@ -1,7 +1,5 @@
 package org.dam2.appEmt.modeloTimeArrival;
 
-import java.util.ArrayList;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
