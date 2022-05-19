@@ -1,5 +1,7 @@
 package org.dam2.appEmt.utilidades;
 
+import java.time.LocalDateTime;
+
 public class Variables {
 
     /*
@@ -7,4 +9,13 @@ public class Variables {
 	 */
     public static String emtKey = "8382fa72-d3de-11ec-bd55-02dc460a2344";
     
+    /**
+     * Fecha refresco token emt
+     */
+    public static LocalDateTime fechaRefrescoTokenEmt = LocalDateTime.MIN;
+
+    /**
+     * Fecha refresco archivo de paradas
+     */
+    public static LocalDateTime fechaRefrescoParadas = LocalDateTime.MIN;
 }

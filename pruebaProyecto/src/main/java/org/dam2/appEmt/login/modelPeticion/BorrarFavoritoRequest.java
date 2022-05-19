@@ -6,7 +6,7 @@ import lombok.Data;
  * Request para poner borrar favorito
  */
 @Data
-public class BorrarFavoritoRequest {
+public final class BorrarFavoritoRequest {
 
     private String idParada;
     

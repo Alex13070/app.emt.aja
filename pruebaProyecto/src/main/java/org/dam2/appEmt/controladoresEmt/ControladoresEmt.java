@@ -1,10 +1,8 @@
 package org.dam2.appEmt.controladoresEmt;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -55,8 +53,7 @@ public class ControladoresEmt {
 	 * 		   la peticion sea correcta, en caso contrario, se mandara un error.
 	 */
 	@GetMapping ("/consultar-parada/{parada}")
-	public ResponseEntity<TimeArrivalBus> consultarParada (@PathVariable String parada, @RequestHeader(HttpHeaders.AUTHORIZATION) String token)
-	{
+	public ResponseEntity<TimeArrivalBus> consultarParada (@PathVariable String parada, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response;
         ResponseEntity<TimeArrivalBus> responseAMandar;
@@ -75,12 +72,6 @@ public class ControladoresEmt {
 			s = response.getBody();
 			
 			TimeArrivalBus tab = gson.fromJson(s, TimeArrivalBus.class);
-
-			//TimeArrivalBus tab = response.getBody();
-
-			// if (!tab.getCode().equals("00")) {
-			// 	throw new RuntimeException("Error de peticion");
-			// }
 			
 			String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
@@ -155,36 +146,8 @@ public class ControladoresEmt {
 		return responseAMandar;
 	}
 
-	public static void recogerParadas() {
-
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> response;
-		String paradas;
-
-		File file = new File (Constantes.URL_ARCHIVO_LISTA_PARADAS);
-
-
-		try (BufferedWriter in= new BufferedWriter(new FileWriter(file))){
-			
-			HttpHeaders headers = new HttpHeaders();
-			headers.set("accessToken", Variables.emtKey);
-			
-			HttpEntity<String> request = new HttpEntity<String>(headers);
-
-			response = restTemplate.postForEntity(Constantes.URL_LISTA_PARADAS, request, String.class);
-
-			
-			paradas = response.getBody();
-
-			in.write(paradas);			
-
-		} catch (Exception e) {
-			log.error("Error fatal: No se ha podido insertar los datos en el fichero. \nMessage: {}", e.getMessage());
-		}
-    }
-
 	@GetMapping ("/consultar-linea/{linea}/{dir}")
-	public ResponseEntity<String> listarParadasDeUnaLinea (@PathVariable String linea, @PathVariable String dir, @RequestHeader("idUsuario") String idUsuario)
+	public ResponseEntity<String> listarParadasDeUnaLinea (@PathVariable String linea, @PathVariable String dir)
 	{
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response;
@@ -210,33 +173,20 @@ public class ControladoresEmt {
 			//TimeArrivalBus tab = response.getBody();
 
 			if (!tab.getCode().equals("00")) {
-				System.out.println();
-				System.out.println();
-				System.err.println(s);
-				System.out.println();
-				System.out.println();
-				throw new RuntimeException("Error de peticion");
+
+				throw new RuntimeException("Error de peticion: " + s);
 			}
-			/*
-			Optional<Usuario> usuario = usuarioService.findById(idUsuario);
-			
-			if (usuario.isPresent()) {
-				guardarDatos (tab, usuario.get());
-			}
-			else {
-				throw new UsernameNotFoundException("El nombre del usuario no existe.");
-			}
-			*/
             
 			responseAMandar = new ResponseEntity<>(s, HttpStatus.OK);
 
 		} catch (JsonSyntaxException e) {
 
+			log.error(e.getMessage());
 			responseAMandar = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			
 		}
-		catch (Exception rce) {
-			System.err.println(rce.getMessage());
+		catch (Exception e) {
+			log.error(e.getMessage());
 			responseAMandar = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 

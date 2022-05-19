@@ -53,13 +53,12 @@ public class Constantes {
 	 * Tiempo de expiracion en milisegundos
 	 */
 	public final static Long TIEMPO_EXPIRACION = 
-		5L * /* Dias */
-		24L  * /* Horas */
+		2L  * /* Horas */
 		60L * /* Minutos */
 		60L * /* Segundos */
 		1000L /* Milisegundos */;
 
 
 	public static final String URL_ARCHIVO_LISTA_PARADAS = "./app.emt.aja/pruebaProyecto/datos/pruebaProparadas.txt";
-
+	
 }

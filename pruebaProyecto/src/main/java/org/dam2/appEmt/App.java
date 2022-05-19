@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 import org.dam2.appEmt.configuration.Cifrado.MD5;
+import org.dam2.appEmt.configuration.filter.EmtAuthenticationFilter;
 import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.Sexo;
 import org.dam2.appEmt.login.modelo.Usuario;
@@ -13,6 +14,7 @@ import org.dam2.appEmt.utilidades.Constantes;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -20,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * Aplicacion a ejecutar
  */
 @SpringBootApplication
+//@EnableScheduling
 public class App {
 
 	
@@ -69,6 +72,12 @@ public class App {
 		};
 	}
 
+	@Bean
+	FilterRegistrationBean<EmtAuthenticationFilter> filtroEmt () {
+		final FilterRegistrationBean<EmtAuthenticationFilter> filtro = new FilterRegistrationBean<>();
+		filtro.setFilter(new EmtAuthenticationFilter());
+		filtro.addUrlPatterns("/controladores-emt/*");
 
-
+		return filtro;
+	}
 }
