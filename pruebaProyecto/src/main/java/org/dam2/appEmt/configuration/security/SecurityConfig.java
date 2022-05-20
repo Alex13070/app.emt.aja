@@ -60,7 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/usuario/probar-token").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/usuario/buscar").authenticated();
         
-        
         //Permisos de acceso a controladores de favoritos
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/favorito/insertar").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/favorito/actualizar").authenticated();
@@ -73,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         //Permisos de acceso a controladores de la emt
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/consultar-parada/**").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/listar-paradas").authenticated();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/consultar-linea/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/controladores-emt/consultar-linea/**").authenticated();
 
         http.addFilter(customAuthenticationFilter);
 
