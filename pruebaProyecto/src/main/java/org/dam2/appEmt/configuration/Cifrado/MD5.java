@@ -1,4 +1,4 @@
-package org.dam2.appEmt.configuration.Cifrado;
+package org.dam2.appEmt.configuration.cifrado;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

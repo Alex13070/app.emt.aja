@@ -3,7 +3,7 @@ package org.dam2.appEmt;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-import org.dam2.appEmt.configuration.Cifrado.MD5;
+import org.dam2.appEmt.configuration.cifrado.MD5;
 import org.dam2.appEmt.configuration.filter.EmtAuthenticationFilter;
 import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.Sexo;
@@ -24,10 +24,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication
 //@EnableScheduling
 public class App {
-
 	
 	public static void main(String[] args) {
-		// ControladoresEmt.recogerParadas(); --> pruebas
+		//FuncionesEmt.recogerParadas();// --> pruebas
 		SpringApplication.run(App.class, args);
 	}
 

@@ -1,49 +1,46 @@
 package org.dam2.appEmt.login.controladores;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Random;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 import javax.transaction.Transactional;
-
-// import java.util.Date;
-// import java.util.List;
-// import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.dam2.appEmt.configuration.filter.CustomAuthorizationFilter;
+import org.dam2.appEmt.configuration.mail.EmailService;
 import org.dam2.appEmt.login.modelPeticion.ActualizarUsuarioRequest;
 import org.dam2.appEmt.login.modelPeticion.AddRolRequest;
+import org.dam2.appEmt.login.modelPeticion.CambiarClaveRequest;
 import org.dam2.appEmt.login.modelPeticion.UsuarioRequest;
 import org.dam2.appEmt.login.modelo.NombreRol;
+import org.dam2.appEmt.login.modelo.PasswordResetToken;
 import org.dam2.appEmt.login.modelo.Rol;
-// import org.dam2.appEmt.login.modelPeticion.LoginRequest;
-// import org.dam2.appEmt.login.modelPeticion.LoginResponse;
 import org.dam2.appEmt.login.modelo.Usuario;
+import org.dam2.appEmt.login.servicios.IPasswordResetTokenService;
 import org.dam2.appEmt.login.servicios.IRolService;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
+import org.dam2.appEmt.utilidades.Constantes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.security.core.GrantedAuthority;
-// import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-// import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.http.HttpHeaders;
-
-//import io.jsonwebtoken.Jwts;
-//import io.jsonwebtoken.SignatureAlgorithm;
-
 
 /**
  * Controladores de usuarios.
@@ -84,6 +81,12 @@ public class UsuarioController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private IPasswordResetTokenService passwordResetTokenService;
+
 
     /**
      * Controlador para insertar usuarios a la base de datos
@@ -94,7 +97,7 @@ public class UsuarioController {
      */
     @Transactional
     @PostMapping("/insertar")
-    public ResponseEntity<UsuarioRequest> insertarUsuario(@RequestBody /*@Valid*/ UsuarioRequest request) {
+    public ResponseEntity<UsuarioRequest> insertarUsuario(@Valid @RequestBody UsuarioRequest request) {
 
         ResponseEntity<UsuarioRequest> respuesta;
 
@@ -128,9 +131,6 @@ public class UsuarioController {
         }
 
         return respuesta;
-
-
-        
     }
 
 
@@ -289,5 +289,82 @@ public class UsuarioController {
         return respuesta;
 
     }
+
+
+    @PostMapping(value="/codigo-recuperacion")
+    public ResponseEntity<Void> codigoRecuperacion(@RequestHeader("correo") String correo) {
+
+        ResponseEntity<Void> response;
+        Optional<Usuario> usuario = usuarioService.findById(correo);
+        
+        try {
+            if (usuario.isPresent()) {
+                Supplier<Integer> random = () -> new Random().nextInt(10);
+
+                //Crear un codigo de 6 digitos
+                String codigo = IntStream.range(0, 6)
+                    .mapToObj(i -> random.get().toString())
+                    .reduce("", (o1,o2) -> o1+o2);
+
+                Usuario u = usuario.get();
+
+                Optional<PasswordResetToken> token = passwordResetTokenService.findByUsername(correo);
+                PasswordResetToken p;
+
+                if (token.isPresent()) {
+                    p = token.get();
+                    p.setExpiryDate(new Date().getTime() + Constantes.TIEMPO_EXPIRACION_TOKEN_RECUPERACION);
+                    p.setToken(codigo);
+                }
+                else {
+                    p = new PasswordResetToken(null, u, codigo, new Date().getTime() + Constantes.TIEMPO_EXPIRACION_TOKEN_RECUPERACION);
+                }
+
+                passwordResetTokenService.save(p);
+                emailService.sendEmail(correo, codigo);
+                response = new ResponseEntity<>(HttpStatus.OK);
+                
+            }
+            else {
+                response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (MailException e) {
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        return response;
+    }
+
+    @PutMapping(value="/cambiar-clave")
+    public ResponseEntity<Void> cambiarClave(@RequestBody CambiarClaveRequest body) {
+
+        ResponseEntity<Void> response;
+        Optional<PasswordResetToken> t = passwordResetTokenService.findByUsername(body.getIdUsuario());
+        
+        try {
+            if (t.isPresent()) {
+                PasswordResetToken token = t.get();
+
+                if (token.getToken().equals(body.getToken())) {
+                    Usuario u = token.getUser();
+                    u.setClave(body.getClave());
+                    usuarioService.update(u);
+                    passwordResetTokenService.deleteByUsername(body.getIdUsuario());
+                    response = new ResponseEntity<>(HttpStatus.OK);
+                }
+                else {
+                    response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            }
+            else {
+                response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (MailException e) {
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        return response;
+    }
+    
 }
 

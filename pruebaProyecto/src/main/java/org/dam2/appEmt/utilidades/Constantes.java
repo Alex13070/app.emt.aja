@@ -59,6 +59,8 @@ public class Constantes {
 		1000L /* Milisegundos */;
 
 
-	public static final String URL_ARCHIVO_LISTA_PARADAS = "./app.emt.aja/pruebaProyecto/datos/pruebaProparadas.txt";
+	public static final String URL_ARCHIVO_LISTA_PARADAS = "./app.emt.aja/pruebaProyecto/datos/Paradas.txt";
+
+    public final static long TIEMPO_EXPIRACION_TOKEN_RECUPERACION = 180 * 1000;
 	
 }

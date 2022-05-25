@@ -57,7 +57,7 @@ public class FavoritoController {
      *         {@exception 500 internalServer error}
      */
     @PostMapping("/insertar")
-    public ResponseEntity<FavoritoResponse> guardarFavorito(@RequestBody FavoritoResponse entity, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<FavoritoResponse> guardarFavorito(@Valid @RequestBody FavoritoResponse entity, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         ResponseEntity<FavoritoResponse> respuesta;
 
@@ -107,8 +107,7 @@ public class FavoritoController {
      *         {@exception 500 internalServer error}
      */
     @PutMapping("/actualizar")
-    public ResponseEntity<FavoritoResponse> actualizarFavorito (
-        @RequestBody FavoritoResponse entity, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<FavoritoResponse> actualizarFavorito (@Valid @RequestBody FavoritoResponse entity, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         ResponseEntity<FavoritoResponse> respuesta;
 

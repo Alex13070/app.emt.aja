@@ -59,6 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/add-rol").hasAuthority(NombreRol.ROLE_ADMIN);
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/usuario/probar-token").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/usuario/buscar").authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/usuario/codigo-recuperacion").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/usuario/cambiar-clave").permitAll();
         
         //Permisos de acceso a controladores de favoritos
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/favorito/insertar").authenticated();
