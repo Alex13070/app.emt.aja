@@ -42,9 +42,16 @@ public class FavoritoController {
      */
     private Logger logger = LoggerFactory.getLogger(FavoritoController.class);
 
+
+    /**
+	 * Microservicio de favorito
+	 */
     @Autowired
     private IFavoritoService favoritoService;
 
+    /**
+	 * Microservicio de usuario
+	 */
     @Autowired
     private IUsuarioService usuarioService;
 

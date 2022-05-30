@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Peticion/Respuesta de favorito
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

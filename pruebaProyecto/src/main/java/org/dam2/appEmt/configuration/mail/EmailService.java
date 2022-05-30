@@ -10,9 +10,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
     
+    /**
+     * Mail sender 
+     */
     @Autowired
     private JavaMailSender mailSender;
 
+    /**
+     * 
+     * @param toEmail email de receptor
+     * @param body token de recuperacion
+     * @throws MailException in case of failure when sending a message
+     */
     public void sendEmail(String toEmail, String body) throws MailException{
 
         SimpleMailMessage message = new SimpleMailMessage();

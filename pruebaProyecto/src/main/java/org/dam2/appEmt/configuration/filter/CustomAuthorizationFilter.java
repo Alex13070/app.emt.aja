@@ -35,7 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
-    // Prefijo del token
+    /**
+     * Prefijo del token
+     */
     private static final String PREFIX = "Bearer ";
 
     @Override
@@ -88,6 +90,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         }
     }
 
+    /**
+     * Decodifica el token JWT
+     * @param authorizationHeader JWT de autorizacion
+     * @return JWT decodificado
+     */
     private static DecodedJWT decodeToken(String authorizationHeader) {
 
         String token = authorizationHeader.substring(PREFIX.length());
@@ -97,6 +104,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         return (DecodedJWT) verifier.verify(token);
     }
 
+    /**
+     * Extrae el id del usuario en base a un token
+     * @param token JWT token
+     * @return User id extraido del token
+     */
     public static String getUserIdFromToken (String token) {
         return decodeToken(token).getSubject();
     }

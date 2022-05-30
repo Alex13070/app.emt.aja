@@ -59,8 +59,14 @@ public class Constantes {
 		1000L /* Milisegundos */;
 
 
+	/**
+	 * Direccion al archivo de lista de paradas
+	 */
 	public static final String URL_ARCHIVO_LISTA_PARADAS = "./app.emt.aja/pruebaProyecto/datos/Paradas.txt";
 
+	/**
+	 * Tiempo de expiracion del token de recuperacion
+	 */
     public final static long TIEMPO_EXPIRACION_TOKEN_RECUPERACION = 180 * 1000;
 	
 }

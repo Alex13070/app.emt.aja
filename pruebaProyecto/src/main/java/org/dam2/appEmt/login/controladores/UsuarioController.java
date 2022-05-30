@@ -78,12 +78,21 @@ public class UsuarioController {
     @Autowired
     private IRolService rolService;
 
+    /**
+	 * Inyeccion de dependencias del password encoder
+	 */
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    /**
+	 * Microservicio de email
+	 */
     @Autowired
     private EmailService emailService;
 
+    /**
+	 * Microservicio de PasswordRessetToken
+	 */
     @Autowired
     private IPasswordResetTokenService passwordResetTokenService;
 
@@ -290,7 +299,13 @@ public class UsuarioController {
 
     }
 
-
+    /**
+     * Pide codigo de recuperacion en base a un correo
+     * @param correo Correo de recuperacion
+     * @return {@true 200 ok}
+     *         {@false 404 not found}
+     *         {@exception 500 internal server error}
+     */
     @PostMapping(value="/codigo-recuperacion")
     public ResponseEntity<Void> codigoRecuperacion(@RequestHeader("correo") String correo) {
 
@@ -298,6 +313,10 @@ public class UsuarioController {
         Optional<Usuario> usuario = usuarioService.findById(correo);
         
         try {
+
+            //Borrar expiradas
+            passwordResetTokenService.deleteAllExpired();
+
             if (usuario.isPresent()) {
                 Supplier<Integer> random = () -> new Random().nextInt(10);
 
@@ -335,6 +354,13 @@ public class UsuarioController {
         return response;
     }
 
+    /**
+     * Controlador para cambiar clave 
+     * @param body datos para el cambio de clave
+     * @return {@true 200 ok}
+     *         {@false 404 not found}
+     *         {@exception 500 internal server error}
+     */
     @PutMapping(value="/cambiar-clave")
     public ResponseEntity<Void> cambiarClave(@RequestBody CambiarClaveRequest body) {
 

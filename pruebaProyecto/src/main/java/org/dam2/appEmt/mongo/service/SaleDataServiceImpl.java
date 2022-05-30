@@ -1,5 +1,7 @@
 package org.dam2.appEmt.mongo.service;
 
+import java.util.List;
+
 import org.dam2.appEmt.mongo.model.SaleData;
 import org.dam2.appEmt.mongo.repository.SaleDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaleDataServiceImpl implements ISaleDataService {
 
+    /**
+     * Repositorio de {@link SaleData}
+     */
     @Autowired 
     private SaleDataRepository daoSaleData;
 
@@ -28,5 +33,17 @@ public class SaleDataServiceImpl implements ISaleDataService {
         
         return exito;
     }
+
+    @Override
+    public List<SaleData> findAll() {
+        return daoSaleData.findAll();
+    }
+
+    @Override
+    public void deleteAll() {
+        daoSaleData.deleteAll();
+    }
+
+
     
 }

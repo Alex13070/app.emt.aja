@@ -13,11 +13,20 @@ import org.dam2.appEmt.controladoresEmt.FuncionesEmt;
 import org.dam2.appEmt.utilidades.Variables;
 import org.springframework.stereotype.Component;
 
+/**
+ * Filtro a las peticiones de la EMT
+ */
 @Component
 public class EmtAuthenticationFilter implements Filter {
 
+    /**
+     * Dias que tardara el servidor en renovar la lista de paradas.
+     */
     private static final long DIAS_RENOVAR_PARADAS = 7;
 
+    /**
+     * Filtro
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         

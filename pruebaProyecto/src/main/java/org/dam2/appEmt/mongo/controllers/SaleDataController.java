@@ -1,12 +1,14 @@
 package org.dam2.appEmt.mongo.controllers;
 
+import java.util.List;
+
 import org.dam2.appEmt.mongo.model.SaleData;
 import org.dam2.appEmt.mongo.service.ISaleDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
@@ -31,20 +33,29 @@ public class SaleDataController {
      */
     private Logger logger = LoggerFactory.getLogger(SaleDataController.class);
     
-    @PostMapping("insertar")
-    public ResponseEntity<SaleData> insert(@RequestBody SaleData saleData ){
+    @GetMapping("/find-all")
+    public ResponseEntity<List<SaleData>> findAll(){
 
-        ResponseEntity<SaleData> respuesta;
+        ResponseEntity<List<SaleData>> respuesta;
         try {
-            if (saleDataService.insert(saleData)) {
-                respuesta = new ResponseEntity<>(saleData, HttpStatus.CREATED);
-                logger.info("Dato de venta insertado");
-            }
-            else {
-                logger.info("Error: Dato de venta no insertado");
-                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);   
-            }
+            List<SaleData> saleData = saleDataService.findAll();
+            respuesta = new ResponseEntity<>(saleData, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+            logger.error("Error fatal: {}", e.getMessage());
+        }
 
+        return respuesta;
+    }
+
+    @DeleteMapping("/delete-all")
+    public ResponseEntity<Void> deleteAll(){
+
+        ResponseEntity<Void> respuesta;
+        try {
+            saleDataService.deleteAll();
+            respuesta = new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
         catch (Exception e) {
             respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 

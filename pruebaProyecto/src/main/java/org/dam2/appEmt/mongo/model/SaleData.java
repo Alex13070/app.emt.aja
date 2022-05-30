@@ -47,7 +47,6 @@ public class SaleData implements Serializable {
     private LocalDateTime fecha;
     private Integer edad;
     private Sexo sexo;
-    //importar el del modelo de time arrival coje geojson
     private GeoJsonPoint geometry;
 
 }

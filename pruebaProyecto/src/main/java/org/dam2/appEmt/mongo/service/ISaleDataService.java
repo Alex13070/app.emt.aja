@@ -1,5 +1,7 @@
 package org.dam2.appEmt.mongo.service;
 
+import java.util.List;
+
 import org.dam2.appEmt.mongo.model.SaleData;
 
 /**
@@ -14,5 +16,16 @@ public interface ISaleDataService {
      *         {@false error al introducir }
      */
     boolean insert(SaleData saleData);
+
+    /**
+     * Busca todos los datos
+     * @return Datos de venta
+     */
+    List<SaleData> findAll();
+
+    /**
+     * Borra todos los datos
+     */
+    void deleteAll();
 
 }

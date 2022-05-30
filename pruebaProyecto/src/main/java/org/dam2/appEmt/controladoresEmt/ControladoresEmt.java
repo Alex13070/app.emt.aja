@@ -40,9 +40,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/controladores-emt")
 public class ControladoresEmt {
 
+	/**
+	 * Microservicio Mongo para guardar datos vendibles
+	 */
 	@Autowired
 	private ISaleDataService saleDataService;
 
+	/**
+	 * Microservicio de usuario
+	 */
 	@Autowired 
 	private IUsuarioService usuarioService;
 
@@ -100,6 +106,11 @@ public class ControladoresEmt {
 		return responseAMandar;
 	}
 
+	/**
+	 * Guarda datos en la base de datos mongo
+	 * @param tab Datos de la emt
+	 * @param usuario Datos de usuario
+	 */
 	private void guardarDatos(TimeArrivalBus tab, Usuario usuario) {
 
 		SaleData saleData = SaleData.builder()
@@ -146,6 +157,12 @@ public class ControladoresEmt {
 		return responseAMandar;
 	}
 
+	/**
+	 * Consulta las lineas de una parada
+	 * @param linea Linea de la emt
+	 * @param dir Direccion
+	 * @return String con el json de paradas de una linea de la emt
+	 */
 	@GetMapping ("/consultar-linea/{linea}/{dir}")
 	public ResponseEntity<String> listarParadasDeUnaLinea (@PathVariable String linea, @PathVariable String dir)
 	{
@@ -167,7 +184,6 @@ public class ControladoresEmt {
 			s = response.getBody();
 			
 			//lo pasa a esto solo para coger luego el mumero
-			//TODO: implementarlo bien?
 			ListaParadasLinea tab = gson.fromJson(s, ListaParadasLinea.class);
 
 			//TimeArrivalBus tab = response.getBody();

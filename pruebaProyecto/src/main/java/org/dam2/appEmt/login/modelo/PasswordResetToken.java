@@ -15,6 +15,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * Tabla de tokens de reseteo de clave
+ * 
+ * CREATE TABLE password_reset_token (
+ *      id BIGINT NOT NULL, 
+ *      expiry_date BIGINT, 
+ *      token VARCHAR(255), 
+ *      id_usuario VARCHAR(255), 
+ *      PRIMARY KEY (id)
+ * ) ENGINE=INNODB;
+ * 
+ * alter table password_reset_token add constraint UK_johu5tq9i7cy1fgyemmlme0p2 unique (id_usuario);
+ * alter table password_reset_token add constraint FKno4ngi2ecktio49ytrq5d2cxh foreign key (id_usuario) references usuario (correo);
+ */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
