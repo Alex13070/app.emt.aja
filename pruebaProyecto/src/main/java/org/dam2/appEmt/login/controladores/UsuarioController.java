@@ -12,7 +12,6 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.dam2.appEmt.configuration.filter.CustomAuthorizationFilter;
-import org.dam2.appEmt.configuration.mail.EmailService;
 import org.dam2.appEmt.login.modelPeticion.ActualizarUsuarioRequest;
 import org.dam2.appEmt.login.modelPeticion.AddRolRequest;
 import org.dam2.appEmt.login.modelPeticion.CambiarClaveRequest;
@@ -21,8 +20,8 @@ import org.dam2.appEmt.login.modelo.NombreRol;
 import org.dam2.appEmt.login.modelo.PasswordResetToken;
 import org.dam2.appEmt.login.modelo.Rol;
 import org.dam2.appEmt.login.modelo.Usuario;
+import org.dam2.appEmt.login.servicios.EmailService;
 import org.dam2.appEmt.login.servicios.IPasswordResetTokenService;
-import org.dam2.appEmt.login.servicios.IRolService;
 import org.dam2.appEmt.login.servicios.IUsuarioService;
 import org.dam2.appEmt.utilidades.Constantes;
 import org.slf4j.Logger;
@@ -31,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,34 +53,10 @@ public class UsuarioController {
     private Logger logger = LoggerFactory.getLogger(UsuarioController.class);
     
     /**
-     * Key de cifrado
-     */
-    @SuppressWarnings("unused")
-    private final String secret = "mySecretKey";
-	
-    /**
-     * Tiempo de expiracion de tokens
-     */
-    @SuppressWarnings("unused")
-	private final long tiempo = 600000;
-    
-    /**
      * Inyeccion de dependencias de los microservicios de {@link Usuario}
      */
     @Autowired
     private IUsuarioService usuarioService;
-
-    /**
-     * Inyeccion de dependencias de los microservicios de {@link Rol}
-     */
-    @Autowired
-    private IRolService rolService;
-
-    /**
-	 * Inyeccion de dependencias del password encoder
-	 */
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     /**
 	 * Microservicio de email
@@ -163,11 +137,10 @@ public class UsuarioController {
 
             if (find.isPresent()) {
                 
-                @Valid
                 Usuario usuario = find.get();
-                logger.info("Token igual {}", passwordEncoder.matches(request.getClave(), usuario.getClave()));                
+                //logger.info("Token igual {}", passwordEncoder.matches(request.getClave(), usuario.getClave()));                
 
-                if (passwordEncoder.matches(request.getClave(), usuario.getClave())) {
+                if (usuarioService.passwordMatches(request.getClave(), usuario.getClave())) {
 
                     usuario.setNombre(request.getNombre());
                     usuario.setApellidos(request.getApellidos());
@@ -216,22 +189,12 @@ public class UsuarioController {
         ResponseEntity<Void> respuesta;
 
         try {
-
-            Optional<Usuario> usuario = usuarioService.findById(entity.getCorreo());
-            Optional<Rol> rol = rolService.findByNombre(entity.getRol());
-            if (usuario.isPresent() && rol.isPresent()) {
-                
-                if (usuarioService.addRol(entity.getCorreo(), entity.getRol())) {
-                    logger.info("Rol added");
-                    respuesta = new ResponseEntity<>(HttpStatus.ACCEPTED);
-                }
-                else { 
-                    logger.info("No se puede add el rol");
-                    respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                }
+            if (usuarioService.addRol(entity.getCorreo(), entity.getRol())) {
+                logger.info("Rol added");
+                respuesta = new ResponseEntity<>(HttpStatus.ACCEPTED);
             }
             else {
-                logger.info("El usuario no existe");
+                logger.info("No se puede incluir el rol");
                 respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }

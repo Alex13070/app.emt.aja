@@ -26,9 +26,13 @@ public interface IUsuarioService {
     boolean update(Usuario usuario);
 
 
+    /**
+     * Busca por id
+     * @param id id usuario
+     * @return Optional con usuario
+     */
     Optional<Usuario> findById(String id);
-    Optional<Usuario> findByCorreoAndClave(String correo, String clave);
-
+    
     /**
      * Busca si el usuario existe en la base de datos.
      * @param id clave primaria del usuario
@@ -45,10 +49,14 @@ public interface IUsuarioService {
      *         {@false no se ha podido hacer }
      */
     boolean addRol(String correo, String nombreRol);
-   
-    // Pruebas
-    //List<Usuario> findAll();
-    //List<Favorito> obtenerFavoritos(String id); 
-    //boolean delete(Usuario usuario);    
+    
+    /**
+     * Mira si las claves coinciden
+     * @param clave1 Clave a comparar
+     * @param clave2 Clave a comparar
+     * @return {@true iguales}
+     *         {@false no iguales}
+     */
+    boolean passwordMatches(String raw, String encoded);
 
 }

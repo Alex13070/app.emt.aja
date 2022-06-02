@@ -78,7 +78,6 @@ public class FavoritoController {
                 throw new Exception("El usuario introducido no existe");
             }
 
-            @Valid
             Favorito favorito = Favorito.builder()
                 .id(
                     FavoritoPK.builder()

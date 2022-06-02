@@ -36,7 +36,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	private final AuthenticationManager authenticationManager;
 
 	/**
-	 * Constructor de la clase. Generado es generado internanmente por Springboot.
+	 * Constructor de la clase. Springboor inyecta las dependencias.
 	 * @param auth Encargado de procesar la autentificacion
 	 */
 	public CustomAuthenticationFilter(AuthenticationManager auth) {

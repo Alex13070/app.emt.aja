@@ -72,11 +72,6 @@ public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
         return daoUsuario.findById(id);
     }
 
-    @Override
-    public Optional<Usuario> findByCorreoAndClave(String correo, String clave) {
-
-        return daoUsuario.findByCorreoAndClave(correo, clave);
-    }
 
     @Override
     public boolean existsById(String id) {
@@ -118,10 +113,10 @@ public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService {
         return new User(u.getCorreo(), u.getClave(), authorities);
     }
 
-    /*
-     * @Override
-     * public List<Usuario> findAll() {
-     * return (List<Usuario>) daoUsuario.findAll();
-     * }
-     */
+    @Override
+    public boolean passwordMatches(String raw, String encoded) {
+        return passwordEncoder.matches(raw, encoded);
+    }
+
+    
 }

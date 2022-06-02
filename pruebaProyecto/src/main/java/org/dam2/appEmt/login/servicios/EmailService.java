@@ -1,4 +1,4 @@
-package org.dam2.appEmt.configuration.mail;
+package org.dam2.appEmt.login.servicios;
 
 import org.dam2.appEmt.utilidades.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
