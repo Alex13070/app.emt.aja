@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class Logs implements Runnable {
+public class Logs implements Runnable { 
 
     /**
      * Fecha y hora exactas de la generacion
