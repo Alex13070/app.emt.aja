@@ -1,5 +1,6 @@
 package org.dam2.appEmt.login.controladores;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import javax.validation.Valid;
 import org.dam2.appEmt.login.modelPeticion.BorrarFavoritoRequest;
 import org.dam2.appEmt.login.modelPeticion.FavoritoResponse;
 import org.dam2.appEmt.configuration.filter.CustomAuthorizationFilter;
+import org.dam2.appEmt.configuration.logs.Logs;
 import org.dam2.appEmt.login.modelo.Favorito;
 import org.dam2.appEmt.login.modelo.FavoritoPK;
 import org.dam2.appEmt.login.modelo.Usuario;
@@ -67,7 +69,7 @@ public class FavoritoController {
     public ResponseEntity<FavoritoResponse> guardarFavorito(@Valid @RequestBody FavoritoResponse entity, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         ResponseEntity<FavoritoResponse> respuesta;
-
+        String msg;
         String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
         try {
@@ -92,15 +94,21 @@ public class FavoritoController {
             if (favoritoService.save(favorito)){
                 respuesta = new ResponseEntity<>(entity, HttpStatus.CREATED);
                 logger.info("Favorito insertado");
+                msg = "Favorito insertado";
             }
             else {
                 respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 logger.info("Error: El favorito ya existe");
+                msg = "El favorito ya existe";
             }
         } catch (Exception e) {
             respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Error al insertar favorito");
+            msg = "Error al insertar favorito " + ((e.getMessage() != null)?e.getMessage():"");
+            
         }
+        
+        new Thread(new Logs(LocalDateTime.now(), "FavoritoController(guardarFavorito)", msg)).start();
 
         return respuesta;
     }
@@ -116,7 +124,7 @@ public class FavoritoController {
     public ResponseEntity<FavoritoResponse> actualizarFavorito (@Valid @RequestBody FavoritoResponse entity, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         ResponseEntity<FavoritoResponse> respuesta;
-
+        String msg;
         String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
         try {
@@ -141,16 +149,22 @@ public class FavoritoController {
             if (favoritoService.update(favorito)){
                 respuesta = new ResponseEntity<>(entity, HttpStatus.ACCEPTED);
                 logger.info("Favorito actualizado");
+                msg = "Favorito actualizado";
             }
             else {
                 respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 logger.info("Error: El favorito a actualizar no existe");
+                msg = "El favorito a actualizar no existe";
             }
 
         } catch (Exception e) {
             respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Error al insertar favorito");
+            msg = "Error al insertar favorito " + ((e.getMessage() != null)?e.getMessage():"");
         }
+
+        
+        new Thread(new Logs(LocalDateTime.now(), "FavoritoController(actualizarFavorito)", msg)).start();
 
         return respuesta;
     }
@@ -166,7 +180,7 @@ public class FavoritoController {
     public ResponseEntity<Void> borrarFavorito (@RequestBody BorrarFavoritoRequest favorito, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         ResponseEntity<Void> respuesta;
-
+        String msg;
         String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
         try {
@@ -185,16 +199,22 @@ public class FavoritoController {
             if (favoritoService.delete(id)){
                 respuesta = new ResponseEntity<>(HttpStatus.ACCEPTED);
                 logger.info("Favorito borrado");
+                msg = "Favorito borrado";
             }
             else {
                 respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 logger.info("Error: el favorito introducido no existe");
+                msg = "No se puede borrar el favorito";
             }
 
         } catch (Exception e) {
             respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             logger.error("Error al eliminar favorito");
+            msg = "Error al eliminar favorito " + ((e.getMessage() != null)?e.getMessage():"");
         }
+
+        
+        new Thread(new Logs(LocalDateTime.now(), "FavoritoController(borrarFavorito)", msg)).start();
         
         return respuesta;
     }
@@ -211,6 +231,7 @@ public class FavoritoController {
 
         ResponseEntity<List<FavoritoResponse>> respuesta;
 
+        String msg;
         
         String idUsuario = CustomAuthorizationFilter.getUserIdFromToken(token);
 
@@ -227,16 +248,24 @@ public class FavoritoController {
                 ).collect(Collectors.toList());
 
                 respuesta = new ResponseEntity<>(favoritos, HttpStatus.ACCEPTED);
+
+                msg = "Obtencion de favoritos de usuarios";
+
                 logger.info("Obtencion de favoritos de usuarios");
+                
             }
             else {
                 respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                logger.error("Error: El usuario introducido no existe");
+                msg = "Usuario introducido no existe";
+                logger.error("Usuario introducido no existe");
             }
         } catch (Exception e) {
             respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            logger.error("Error al buscar favoritos" + e.getMessage());
+            msg = "Error al buscar favoritos " + ((e.getMessage() != null)?e.getMessage():"");
+            logger.error("Error al buscar favoritos " + ((e.getMessage() != null)?e.getMessage():""));
         }
+
+        new Thread(new Logs(LocalDateTime.now(), "FavoritoController(obtenerFavoritos)", msg)).start();
 
         return respuesta;
 

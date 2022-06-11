@@ -71,6 +71,10 @@ public class App {
 		};
 	}
 
+	/**
+	 * Filtro de la EMT
+	 * @return Filtro de la EMT
+	 */
 	@Bean
 	FilterRegistrationBean<EmtAuthenticationFilter> filtroEmt () {
 		final FilterRegistrationBean<EmtAuthenticationFilter> filtro = new FilterRegistrationBean<>();

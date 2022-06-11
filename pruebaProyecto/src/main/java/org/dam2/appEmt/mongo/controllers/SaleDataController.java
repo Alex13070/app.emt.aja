@@ -33,6 +33,10 @@ public class SaleDataController {
      */
     private Logger logger = LoggerFactory.getLogger(SaleDataController.class);
     
+    /**
+     * Busca todos los SaleData de la base de datos
+     * @return Lista de sale data
+     */
     @GetMapping("/find-all")
     public ResponseEntity<List<SaleData>> findAll(){
 
@@ -49,6 +53,10 @@ public class SaleDataController {
         return respuesta;
     }
 
+    /**
+     * Borra todos los SaleData
+     * @return ResponseEntity
+     */
     @DeleteMapping("/delete-all")
     public ResponseEntity<Void> deleteAll(){
 

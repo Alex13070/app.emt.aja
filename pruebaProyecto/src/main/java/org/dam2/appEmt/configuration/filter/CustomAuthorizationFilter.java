@@ -74,7 +74,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 } catch (Exception e) {
 
                     //En caso de error, enviaremos este mensaje
-                    log.error("Error haciendo login: {}", e.getMessage());
+                    log.error("Error, no tienes autorizacion para acceder a este recurso: {}", e.getMessage());
                     response.setHeader("error", e.getMessage());
                     response.setStatus(HttpStatus.FORBIDDEN.value());
 

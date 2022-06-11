@@ -42,7 +42,7 @@ public class Constantes {
 	/**
 	 * Password del administrador
 	 */
-	public final static String PASSWORD_ADMIN = "Xacvrwe112?";
+	public final static String PASSWORD_ADMIN = "Autobus2022?";
 
 	/**
 	 * Secret key de cifrado JWT
@@ -62,7 +62,7 @@ public class Constantes {
 	/**
 	 * Direccion al archivo de lista de paradas
 	 */
-	public static final String URL_ARCHIVO_LISTA_PARADAS = "./app.emt.aja/pruebaProyecto/datos/Paradas.txt";
+	public static final String URL_ARCHIVO_LISTA_PARADAS = "./Paradas.txt";
 
 	/**
 	 * Tiempo de expiracion del token de recuperacion

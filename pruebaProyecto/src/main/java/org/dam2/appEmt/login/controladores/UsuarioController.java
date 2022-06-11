@@ -1,5 +1,6 @@
 package org.dam2.appEmt.login.controladores;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.dam2.appEmt.configuration.filter.CustomAuthorizationFilter;
+import org.dam2.appEmt.configuration.logs.Logs;
 import org.dam2.appEmt.login.modelPeticion.ActualizarUsuarioRequest;
 import org.dam2.appEmt.login.modelPeticion.AddRolRequest;
 import org.dam2.appEmt.login.modelPeticion.CambiarClaveRequest;
@@ -29,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -74,7 +75,7 @@ public class UsuarioController {
     /**
      * Controlador para insertar usuarios a la base de datos
      * @param usuario Usuario a insertar
-     * @return {@true 202 accepted y usuario insertado}
+     * @return {@true 201 created y usuario insertado}
      *         {@false 400 bad request}
      *         {@exception 500 internal server error}
      */
@@ -83,6 +84,7 @@ public class UsuarioController {
     public ResponseEntity<UsuarioRequest> insertarUsuario(@Valid @RequestBody UsuarioRequest request) {
 
         ResponseEntity<UsuarioRequest> respuesta;
+        String msg;
 
         try {
 
@@ -101,17 +103,22 @@ public class UsuarioController {
                 usuarioService.addRol(usuario.getCorreo(), NombreRol.ROLE_USER);
                 respuesta = new ResponseEntity<>(request, HttpStatus.CREATED);
                 logger.info("Usuario insertado");
+                msg = "Favorito insertado";
             }
             else {
                 logger.info("Error: El usuario ya existe");
-                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);   
+                respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                msg = "Error el usuario ya existe";   
             }
 
         }
         catch (Exception e) {
             respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
             logger.error("Error al insertar usuario");
+            msg = "Error al insertar usuario " + ((e.getMessage() != null)?e.getMessage():"");
         }
+
+        new Thread(new Logs(LocalDateTime.now(), "UsuarioController(insertarUsuario)", msg)).start();
 
         return respuesta;
     }
@@ -128,6 +135,7 @@ public class UsuarioController {
     public ResponseEntity<ActualizarUsuarioRequest> actualizarUsuario(@RequestBody ActualizarUsuarioRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         ResponseEntity<ActualizarUsuarioRequest> respuesta;
+        String msg;
 
         try {
 
@@ -156,21 +164,27 @@ public class UsuarioController {
 
                     logger.info("Usuario actualizado");
                     respuesta = new ResponseEntity<>(request, HttpStatus.ACCEPTED);
+                    msg = "Usuario actualizado";
                 }
                 else {
                     logger.info("Clave incorrecta");
+                    msg = "Clave incorrecta";
                     respuesta = new ResponseEntity<>( HttpStatus.NOT_ACCEPTABLE);
                 }
             }
             else {
                 logger.info("El usuario no existe");
+                msg = "El usuario a actualizar no existe";
                 respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
         catch (Exception e) {
-            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+            respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            msg = "Error al actualizar usuario " + ((e.getMessage() != null)?e.getMessage():"");
             logger.error("Error al actualizar usuario");
         }
+        
+        new Thread(new Logs(LocalDateTime.now(), "UsuarioController(actualizarUsuario)", msg)).start();
 
         return respuesta;
 
@@ -187,21 +201,27 @@ public class UsuarioController {
     public ResponseEntity<Void> addRolUsuario(@RequestBody AddRolRequest entity) {
 
         ResponseEntity<Void> respuesta;
+        String msg;
 
         try {
             if (usuarioService.addRol(entity.getCorreo(), entity.getRol())) {
                 logger.info("Rol added");
                 respuesta = new ResponseEntity<>(HttpStatus.ACCEPTED);
+                msg = "Rol added";
             }
             else {
                 logger.info("No se puede incluir el rol");
                 respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                msg = "Rol not added";
             }
         }
         catch (Exception e) {
             respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
             logger.error("Error al add rol al usuario");
+            msg = "Error ading rol " + ((e.getMessage() != null)?e.getMessage():"");
         }
+        
+        new Thread(new Logs(LocalDateTime.now(), "UsuarioController(addRolUsuario)", msg)).start();
 
         return respuesta;
 
@@ -213,6 +233,8 @@ public class UsuarioController {
      */
     @GetMapping("/probar-token")
     public ResponseEntity<Void> tokenOperativo(){
+        
+        new Thread(new Logs(LocalDateTime.now(), "UsuarioController(tokenOperativo)", "Prueba de token")).start();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -228,6 +250,7 @@ public class UsuarioController {
     public ResponseEntity<UsuarioRequest> findById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
         ResponseEntity<UsuarioRequest> respuesta;
+        String msg;
 
         try {
 
@@ -247,17 +270,21 @@ public class UsuarioController {
                     .build();
 
                 respuesta = new ResponseEntity<>(usuario, HttpStatus.ACCEPTED);
+                msg = "Usuario buscado";
             }
             else {
                 logger.info("El usuario no existe");
                 respuesta = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                msg = "Usuario no existe";
             }
         }
         catch (Exception e) {
             respuesta = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
-            logger.error("Error al add rol al usuario");
+            logger.error("Error al buscar usuario");
+            msg = "Error al buscar usuario " + ((e.getMessage() != null)?e.getMessage():"");
         }
 
+        new Thread(new Logs(LocalDateTime.now(), "UsuarioController(findById)", msg)).start();
         return respuesta;
 
     }
@@ -273,10 +300,11 @@ public class UsuarioController {
     public ResponseEntity<Void> codigoRecuperacion(@RequestHeader("correo") String correo) {
 
         ResponseEntity<Void> response;
-        Optional<Usuario> usuario = usuarioService.findById(correo);
-        
-        try {
+        String msg;
 
+        try {
+            
+            Optional<Usuario> usuario = usuarioService.findById(correo);
             //Borrar expiradas
             passwordResetTokenService.deleteAllExpired();
 
@@ -305,14 +333,20 @@ public class UsuarioController {
                 passwordResetTokenService.save(p);
                 emailService.sendEmail(correo, codigo);
                 response = new ResponseEntity<>(HttpStatus.OK);
+                msg = "Codigo creado";
                 
             }
             else {
                 response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                msg = "Codigo no creado";
             }
-        } catch (MailException e) {
+        } catch (Exception e) {
             response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            msg = "Error al crear crear codigo " + ((e.getMessage() != null)?e.getMessage():"");
         }
+
+        
+        new Thread(new Logs(LocalDateTime.now(), "UsuarioController(codigoRecuperacion)", msg)).start();
         
         return response;
     }
@@ -328,9 +362,12 @@ public class UsuarioController {
     public ResponseEntity<Void> cambiarClave(@RequestBody CambiarClaveRequest body) {
 
         ResponseEntity<Void> response;
-        Optional<PasswordResetToken> t = passwordResetTokenService.findByUsername(body.getIdUsuario());
-        
+        String msg;
+
         try {
+
+            Optional<PasswordResetToken> t = passwordResetTokenService.findByUsername(body.getIdUsuario());
+
             if (t.isPresent()) {
                 PasswordResetToken token = t.get();
 
@@ -340,18 +377,24 @@ public class UsuarioController {
                     usuarioService.update(u);
                     passwordResetTokenService.deleteByUsername(body.getIdUsuario());
                     response = new ResponseEntity<>(HttpStatus.OK);
+                    msg = "Clave cambiada";
                 }
                 else {
                     response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    msg = "Codigo incorrecto";
                 }
             }
             else {
                 response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                msg = "No existe el codigo";
             }
-        } catch (MailException e) {
+        } catch (Exception e) {
             response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            msg = "Error al cambiar clave " + ((e.getMessage() != null)?e.getMessage():"");
         }
         
+        
+        new Thread(new Logs(LocalDateTime.now(), "UsuarioController(cambiarClave)", msg)).start();
         return response;
     }
     
